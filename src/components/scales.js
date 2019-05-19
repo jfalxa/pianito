@@ -18,13 +18,13 @@ const SCALES = { major: MAJOR, minor: MINOR }
 
 let timeout
 
-function playSequence(play, [first = [], ...rest]) {
+function playSequence(play, sequence, whole = sequence) {
+  const [first = [], ...rest] = sequence
+
   play(first)
 
-  if (first.length === 0) return
-
   timeout = setTimeout(() => {
-    playSequence(play, rest)
+    playSequence(play, rest.length ? rest : whole.reverse(), whole)
   }, 1000)
 }
 
