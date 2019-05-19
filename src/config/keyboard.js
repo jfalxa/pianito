@@ -1,4 +1,5 @@
 export default {
+  // C4 - C5
   q: 39,
   2: 40,
   w: 41,
@@ -13,6 +14,7 @@ export default {
   u: 50,
   i: 51,
 
+  // C3 - C4
   z: 27,
   s: 28,
   x: 29,

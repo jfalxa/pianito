@@ -1,12 +1,12 @@
 import React from 'react'
 
-import KEYS from '../config/keys'
+import KEYS from '../config/keyboard'
+import { MAJOR } from '../config/scales'
 import { sequence, steps, percent } from '../helpers'
 
 import { Box } from './system'
 
-const SCALE = [1, 1, 1 / 2, 1, 1, 1, 1 / 2]
-const STEPS = steps(SCALE)
+const STEPS = steps(MAJOR)
 
 const WHITE_WIDTH = 1 / 52
 const BLACK_WIDTH = (2 / 3) * WHITE_WIDTH
@@ -33,6 +33,7 @@ const Black = Box.with(({ pressed, ...props }) => ({
   bg: pressed ? 'lightgrey' : 'black',
   zIndex: 1,
   b: '1px solid black',
+  bt: 'none',
   mx: percent(-BLACK_WIDTH / 2)
 }))
 

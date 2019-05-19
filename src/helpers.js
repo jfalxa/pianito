@@ -13,3 +13,15 @@ export function percent(fraction) {
 export function sequence(count) {
   return Array(count).fill(0).map((_, i) => i); // prettier-ignore
 }
+
+export function ok(value) {
+  return value === 0 || Boolean(value)
+}
+
+export function flip(object) {
+  const flipped = {}
+  for (const key in object) {
+    flipped[object[key]] = key
+  }
+  return flipped
+}

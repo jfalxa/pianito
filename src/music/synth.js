@@ -40,7 +40,7 @@ function createSynth() {
   }
 
   function balanceKeyOscs() {
-    const gain = 0.9 / Object.keys(playing).length
+    const gain = 0.95 / Object.keys(playing).length
 
     for (const key in playing) {
       const osc = playing[key]
