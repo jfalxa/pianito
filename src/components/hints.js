@@ -22,8 +22,8 @@ const Chord = Txt.with(({ value }) => ({
   children: value.length >= 3 && getChord(value)
 }))
 
-const Hint = ({ value }) => (
-  <Container>
+const Hint = ({ value, ...props }) => (
+  <Container {...props}>
     <Notes value={value} />
     <Chord value={value} />
   </Container>

@@ -11,11 +11,8 @@ const CHORD_NAMES = Object.keys(CHORDS)
 
 const Fieldset = Box.as('fieldset')
 const Legend = Box.as('legend')
-
 const Form = Box.as('form').with({ flexDirection: 'column' })
-
 const Button = Box.as('button').with({ justifyContent: 'center' })
-
 const Row = Box.with({ '& *': { flex: 1 } })
 
 const NumberField = Box.as('input').with(({ onChange, ...props }) => ({
