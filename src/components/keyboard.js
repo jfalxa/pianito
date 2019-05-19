@@ -3,6 +3,7 @@ import React from 'react'
 import KEYS from '../config/keyboard'
 import { MAJOR } from '../config/scales'
 import { sequence, steps, percent } from '../helpers'
+import connectMIDI from '../music/midi'
 
 import { Box } from './system'
 
@@ -47,12 +48,16 @@ const Key = ({ index, pressed }) => {
 class Keyboard extends React.Component {
   keys = sequence(88)
 
-  play(key) {
+  componentDidMount() {
+    connectMIDI(this.play, this.stop)
+  }
+
+  play = key => {
     const { value, onChange } = this.props
     onChange([...value, key])
   }
 
-  stop(key) {
+  stop = key => {
     const { value, onChange } = this.props
     onChange(value.filter(k => k !== key))
   }

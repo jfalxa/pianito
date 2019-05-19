@@ -41,7 +41,7 @@ export function getChord(keys) {
 
         if (i < keys.length && permutation.join('-') === invChord.join('-')) {
           const root = permutation.indexOf(0)
-          matches.push([keyToNote(sorted[root]), chord, i].join(' '))
+          matches.push([keyToNote(sorted[root]), chord, `(${i})`].join(' '))
         }
       })
     )

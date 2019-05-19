@@ -19,7 +19,7 @@ const Notes = Txt.as('b').with(({ value }) => ({
 const Chord = Txt.with(({ value }) => ({
   justifyContent: 'center',
   height: 24,
-  children: value.length >= 3 && `(${getChord(value)})`
+  children: value.length >= 3 && getChord(value)
 }))
 
 const Hint = ({ value }) => (
