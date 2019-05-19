@@ -29,7 +29,7 @@ const Controller = () => {
   return (
     <Screen>
       <Chords play={setKeys} mb={8} />
-      <Hints value={keys} mt={8} />
+      <Hints value={keys} mb={8} />
       <Keyboard value={keys} onChange={setKeys} />
     </Screen>
   )

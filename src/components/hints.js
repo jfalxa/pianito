@@ -19,14 +19,14 @@ const Notes = Txt.as('b').with(({ value }) => ({
 const Chord = Txt.with(({ value }) => ({
   justifyContent: 'center',
   height: 24,
-  children: value.length >= 3 && getChord(value)
+  children: value.length >= 3 && getChord(value).join(', ')
 }))
 
-const Hint = ({ value, ...props }) => (
+const Hints = ({ value, ...props }) => (
   <Container {...props}>
-    <Notes value={value} />
     <Chord value={value} />
+    <Notes value={value} />
   </Container>
 )
 
-export default Hint
+export default Hints
