@@ -6,6 +6,7 @@ import { Box } from './system'
 import Keyboard from './keyboard'
 import Chords from './chords'
 import Hints from './hints'
+import Scales from './scales'
 
 const play = createSynth()
 
@@ -28,7 +29,11 @@ const Controller = () => {
 
   return (
     <Screen>
-      <Chords play={setKeys} mb={8} />
+      <Box mb={8}>
+        <Chords play={setKeys} />
+        <Scales play={setKeys} />
+      </Box>
+
       <Hints value={keys} mb={8} />
       <Keyboard value={keys} onChange={setKeys} />
     </Screen>

@@ -1,13 +1,11 @@
 import React from 'react'
 
 import KEYS from '../config/keyboard'
-import { MAJOR } from '../config/scales'
-import { sequence, steps, percent } from '../helpers'
+import { MAJOR_STEPS } from '../config/scales'
+import { sequence, percent } from '../helpers'
 import connectMIDI from '../music/midi'
 
 import { Box } from './system'
-
-const STEPS = steps(MAJOR)
 
 const WHITE_WIDTH = 1 / 52
 const BLACK_WIDTH = (2 / 3) * WHITE_WIDTH
@@ -40,7 +38,7 @@ const Black = Box.with(({ pressed, ...props }) => ({
 
 const Key = ({ index, pressed }) => {
   const note = (9 + index) % 12
-  const Type = STEPS.includes(note) ? White : Black
+  const Type = MAJOR_STEPS.includes(note) ? White : Black
 
   return <Type id={index} pressed={pressed} />
 }

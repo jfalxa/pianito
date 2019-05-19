@@ -4,30 +4,17 @@ import NOTES from '../config/notes'
 import CHORDS from '../config/chords'
 import INVERSIONS from '../config/inversions'
 import { buildChord } from '../music/chords'
-
-import { Box } from './system'
+import {
+  Fieldset,
+  Legend,
+  Form,
+  Row,
+  Select,
+  NumberField,
+  Button
+} from './system'
 
 const CHORD_NAMES = Object.keys(CHORDS)
-
-const Fieldset = Box.as('fieldset')
-const Legend = Box.as('legend')
-const Form = Box.as('form').with({ flexDirection: 'column' })
-const Button = Box.as('button').with({ justifyContent: 'center' })
-const Row = Box.with({ '& *': { flex: 1 } })
-
-const NumberField = Box.as('input').with(({ onChange, ...props }) => ({
-  ...props,
-  type: 'number',
-  onChange: e => onChange(e.target.value)
-}))
-
-const Select = Box.as('select').with(({ options, onChange, ...props }) => ({
-  ...props,
-  onChange: e => onChange(e.target.value),
-  children: options.map(option => (
-    <option key={option} value={option} children={option} />
-  ))
-}))
 
 const Chords = ({ play, ...props }) => {
   const [playing, setPlaying] = useState(false)
@@ -53,7 +40,7 @@ const Chords = ({ play, ...props }) => {
 
   return (
     <Fieldset {...props}>
-      <Legend>Chord builder</Legend>
+      <Legend>Chord</Legend>
       <Form>
         <Row>
           <Select value={root} options={NOTES} onChange={setRoot} />
