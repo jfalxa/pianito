@@ -1,5 +1,5 @@
-import { steps } from '../helpers'
-import { noteToKey } from './converter'
+import { ok } from '../helpers'
+import { buildScale } from './scales'
 
 const DEGREES = {
   I: 0,
@@ -11,20 +11,47 @@ const DEGREES = {
   VII: 6
 }
 
-export function buildScale(tonic, scale) {
-  const tonicKey = noteToKey(tonic)
-  return steps(scale).map(step => tonicKey + step)
+function parseProgressions(progressions) {
+  return progressions.split(`\n`).map(line => {
+    const [tonic, degrees] = line.split(':')
+
+    return [
+      tonic.trim(),
+      degrees
+        .split('-')
+        .map(d => d.trim())
+        .map(degree => ({
+          degree: DEGREES[degree.replace('7', '').toUpperCase()],
+          seven: degree.includes('7')
+        }))
+    ]
+  })
 }
 
-export function buildScaleChords(scale) {
-  return scale.map((root, i) => [
-    root,
-    scale[(i + 2) % 7] + (i + 2 >= 7 ? 12 : 0),
-    scale[(i + 4) % 7] + (i + 4 >= 7 ? 12 : 0)
-  ])
+function buildChord(scale, degree, seven) {
+  const chord = [
+    scale[degree],
+    scale[(degree + 2) % 7], // + (degree + 2 >= 7 ? 12 : 0),
+    scale[(degree + 4) % 7], // + (degree + 4 >= 7 ? 12 : 0),
+    seven && scale[(degree + 6) % 7] // + (degree + 6 >= 7 ? 12 : 0)
+  ]
+
+  return chord.filter(ok)
 }
 
-export function selectDegrees(scale, progression) {
-  const degrees = progression.split(' ').map(degree => DEGREES[degree])
-  return degrees.map(degree => scale[degree])
+export function buildProgressions(progressions) {
+  const chords = []
+
+  parseProgressions(progressions).forEach(([tonic, degrees]) => {
+    const type = tonic.includes('m') ? 'minor' : 'major'
+    const scale = buildScale(tonic.replace('m', ''), type)
+
+    const scaleChords = degrees.map(({ degree, seven }) =>
+      buildChord(scale, degree, seven)
+    )
+
+    chords.push(...scaleChords)
+  })
+
+  return chords
 }

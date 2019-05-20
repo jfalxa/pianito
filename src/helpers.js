@@ -25,3 +25,14 @@ export function flip(object) {
   }
   return flipped
 }
+
+export function loop(array, action, duration = 750) {
+  let index = 1
+
+  action(array[0])
+
+  return setInterval(() => {
+    action(array[index % array.length])
+    index++
+  }, duration)
+}

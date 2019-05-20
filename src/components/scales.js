@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
 import NOTES from '../config/notes'
-import CHORDS from '../config/chords'
-import INVERSIONS from '../config/inversions'
-import { buildChord } from '../music/chords'
+import { buildScale } from '../music/scales'
+
 import {
   Fieldset,
   Legend,
@@ -14,16 +13,13 @@ import {
   Button
 } from './system'
 
-const CHORD_NAMES = Object.keys(CHORDS)
+let interval
 
-const Chords = ({ play, ...props }) => {
+const Scales = ({ playSequence, ...props }) => {
   const [playing, setPlaying] = useState(false)
-  const [root, setRoot] = useState('C')
+  const [tonic, setTonic] = useState('C')
   const [octave, setOctave] = useState(4)
   const [type, setType] = useState('major')
-  const [inversion, setInversion] = useState('root_position')
-
-  const chord = buildChord(root, octave, type, inversion)
 
   const togglePlay = e => {
     e.preventDefault()
@@ -32,18 +28,22 @@ const Chords = ({ play, ...props }) => {
 
   useEffect(() => {
     if (playing) {
-      play(chord)
+      const scale = buildScale(tonic + octave, type)
+      const sequence = scale.map(key => [key])
+      interval = playSequence(sequence)
     } else {
-      play([])
+      clearInterval(interval)
+      playSequence()
     }
-  }, [playing, root, octave, type, inversion])
+  }, [playing])
 
   return (
     <Fieldset {...props}>
-      <Legend>Chords</Legend>
-      <Form>
+      <Legend>Scales</Legend>
+
+      <Form alignSelf="stretch">
         <Row>
-          <Select value={root} options={NOTES} onChange={setRoot} />
+          <Select value={tonic} options={NOTES} onChange={setTonic} />
 
           <NumberField
             value={octave}
@@ -54,14 +54,7 @@ const Chords = ({ play, ...props }) => {
           />
         </Row>
 
-        <Select value={type} options={CHORD_NAMES} onChange={setType} />
-
-        <Select
-          value={inversion}
-          options={INVERSIONS}
-          onChange={setInversion}
-          mt={8}
-        />
+        <Select value={type} options={['major', 'minor']} onChange={setType} />
 
         <Button onClick={togglePlay}>{playing ? 'STOP' : 'PLAY'}</Button>
       </Form>
@@ -69,4 +62,4 @@ const Chords = ({ play, ...props }) => {
   )
 }
 
-export default Chords
+export default Scales

@@ -15,7 +15,7 @@ export const Txt = Styled.as('span').with({
   boxSizing: 'border-box'
 })
 
-export const Fieldset = Box.as('fieldset')
+export const Fieldset = Box.as('fieldset').with({ px: 6, pb: 6 })
 
 export const Legend = Box.as('legend')
 
@@ -24,6 +24,8 @@ export const Form = Box.as('form').with({ flexDirection: 'column' })
 export const Button = Box.as('button').with({ justifyContent: 'center' })
 
 export const Row = Box.with({ '& *': { flex: 1 } })
+
+export const TextArea = Box.as('textarea').with(inputChange)
 
 export const Input = Box.as('input').with(inputChange, { type: 'text' })
 

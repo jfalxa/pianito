@@ -1,70 +1,35 @@
 import React, { useState, useEffect } from 'react'
 
-import NOTES from '../config/notes'
-import { MAJOR, MINOR } from '../config/scales'
-import {
-  buildScaleChords,
-  buildScale,
-  selectDegrees
-} from '../music/progressions'
+import { buildProgressions } from '../music/progressions'
+import { Fieldset, Legend, Form, Button, TextArea } from './system'
 
-import {
-  Fieldset,
-  Legend,
-  Form,
-  Row,
-  Select,
-  NumberField,
-  Button,
-  Input
-} from './system'
+let interval
 
-const SCALES = { major: MAJOR, minor: MINOR }
+const ProgTextArea = TextArea.with({
+  flex: 1,
+  width: '100%',
+  fontSize: 8,
+  mb: 8
+})
 
-let timeout
-
-function playSequence(play, sequence, whole = sequence) {
-  const [first = [], ...rest] = sequence
-
-  play([])
-  play(first)
-
-  timeout = setTimeout(() => {
-    const nextSequence = rest.length > 0 ? rest : whole
-    playSequence(play, nextSequence, whole)
-  }, 1000)
-}
-
-function playProgression(play, tonic, type, progression) {
-  const scale = buildScale(tonic, SCALES[type])
-  const chords = buildScaleChords(scale)
-  const progChords = selectDegrees(chords, progression)
-
-  playSequence(play, progChords)
-}
-
-const Progressions = ({ play, ...props }) => {
+const Progressions = ({ playSequence, ...props }) => {
   const [playing, setPlaying] = useState(false)
-  const [tonic, setTonic] = useState('C')
-  const [octave, setOctave] = useState(4)
-  const [scale, setScale] = useState('major')
-  const [progression, setProgression] = useState('I IV V')
+  const [progressions, setProgressions] = useState(
+    'C4: I - IV - V\nA3m: IV - V - I'
+  )
 
   const togglePlay = e => {
     e.preventDefault()
-
-    if (timeout) {
-      clearTimeout(timeout)
-    }
-
     setPlaying(!playing)
   }
 
   useEffect(() => {
     if (playing) {
-      playProgression(play, tonic + octave, scale, progression)
+      const chords = buildProgressions(progressions)
+      interval = playSequence(chords)
     } else {
-      play([])
+      clearInterval(interval)
+      playSequence()
     }
   }, [playing])
 
@@ -73,34 +38,8 @@ const Progressions = ({ play, ...props }) => {
       <Legend>Progressions</Legend>
 
       <Form alignSelf="stretch">
-        <Row>
-          <Select value={tonic} options={NOTES} onChange={setTonic} />
-
-          <NumberField
-            value={octave}
-            min={0}
-            max={7}
-            step={1}
-            onChange={setOctave}
-          />
-        </Row>
-
-        <Select
-          value={scale}
-          options={['major', 'minor']}
-          onChange={setScale}
-        />
-
-        <Input
-          value={progression}
-          onChange={setProgression}
-          width="100%"
-          mt={8}
-        />
-
-        <Button onClick={togglePlay} mt={8}>
-          {playing ? 'STOP' : 'PLAY'}
-        </Button>
+        <ProgTextArea value={progressions} onChange={setProgressions} />
+        <Button onClick={togglePlay}>{playing ? 'STOP' : 'PLAY'}</Button>
       </Form>
     </Fieldset>
   )
