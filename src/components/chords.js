@@ -40,7 +40,7 @@ const Chords = ({ play, ...props }) => {
 
   return (
     <Fieldset {...props}>
-      <Legend>Chord</Legend>
+      <Legend>Chords</Legend>
       <Form>
         <Row>
           <Select value={root} options={NOTES} onChange={setRoot} />

@@ -6,7 +6,7 @@ import { Box } from './system'
 import Keyboard from './keyboard'
 import Chords from './chords'
 import Hints from './hints'
-import Scales from './scales'
+import Progressions from './progressions'
 
 const play = createSynth()
 
@@ -22,6 +22,15 @@ const Screen = Box.with({
   p: 16
 })
 
+const Forms = Box.with({
+  width: 400,
+
+  '& > *': {
+    flexShrink: 0,
+    width: '50%'
+  }
+})
+
 const Controller = () => {
   const [keys, setKeys] = useState([])
 
@@ -29,10 +38,10 @@ const Controller = () => {
 
   return (
     <Screen>
-      <Box mb={8}>
+      <Forms mb={8}>
         <Chords play={setKeys} />
-        <Scales play={setKeys} />
-      </Box>
+        <Progressions play={setKeys} />
+      </Forms>
 
       <Hints value={keys} mb={8} />
       <Keyboard value={keys} onChange={setKeys} />

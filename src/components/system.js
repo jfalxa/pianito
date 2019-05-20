@@ -1,6 +1,10 @@
 import React from 'react'
 import Styled from 'react-systyle'
 
+function inputChange({ onChange, ...props }) {
+  return { ...props, onChange: e => onChange(e.target.value) }
+}
+
 export const Box = Styled.with({
   display: 'flex',
   boxSizing: 'border-box'
@@ -12,21 +16,24 @@ export const Txt = Styled.as('span').with({
 })
 
 export const Fieldset = Box.as('fieldset')
+
 export const Legend = Box.as('legend')
+
 export const Form = Box.as('form').with({ flexDirection: 'column' })
+
 export const Button = Box.as('button').with({ justifyContent: 'center' })
+
 export const Row = Box.with({ '& *': { flex: 1 } })
 
-export const NumberField = Box.as('input').with(({ onChange, ...props }) => ({
-  ...props,
-  type: 'number',
-  onChange: e => onChange(e.target.value)
-}))
+export const Input = Box.as('input').with(inputChange, { type: 'text' })
+
+export const NumberField = Input.with({ type: 'number' })
 
 export const Select = Box.as('select').with(
-  ({ options, onChange, ...props }) => ({
+  inputChange,
+  { height: 21 },
+  ({ options, ...props }) => ({
     ...props,
-    onChange: e => onChange(e.target.value),
     children: options.map(option => (
       <option key={option} value={option} children={option} />
     ))
