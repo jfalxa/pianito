@@ -10,7 +10,7 @@ export function prettyChord(chord) {
 
 export function matchesChord(chord, intervals) {
   const matchesChord = intervals.every(interval => chord.includes(interval))
-  const matchesIntervals = false //chord.every(interval => intervals.includes(interval))
+  const matchesIntervals = chord.every(interval => intervals.includes(interval))
 
   return matchesChord || matchesIntervals
 }
