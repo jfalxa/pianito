@@ -12,7 +12,14 @@ const BLACK_WIDTH = (2 / 3) * WHITE_WIDTH
 const White = Box.with(
   ({ note, interval, root, pressed, highlighted, ...props }) => ({
     ...props,
-    children: <Info bottom note={note} interval={interval} show={pressed} />,
+    children: (
+      <Info
+        bottom
+        note={note}
+        interval={interval}
+        show={pressed || highlighted}
+      />
+    ),
     position: 'relative',
     width: percent(WHITE_WIDTH),
     br: '1px solid black',
@@ -27,7 +34,9 @@ const White = Box.with(
 const Black = Box.with(
   ({ note, interval, root, pressed, highlighted, ...props }) => ({
     ...props,
-    children: <Info top note={note} interval={interval} show={pressed} />,
+    children: (
+      <Info top note={note} interval={interval} show={pressed || highlighted} />
+    ),
     position: 'relative',
     width: percent(BLACK_WIDTH),
     height: '66%',
