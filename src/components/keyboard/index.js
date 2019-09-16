@@ -1,47 +1,21 @@
 import React from 'react'
 
-import KEYS from '../config/keyboard'
-import { MAJOR_STEPS } from '../config/scales'
-import { sequence, percent } from '../helpers'
-import connectMIDI from '../music/midi'
+import KEYS from '../../config/keyboard'
+import { sequence } from '../../helpers'
+import { computeInterval } from '../../music/intervals'
+import connectMIDI from '../../music/midi'
 
-import { Box } from './system'
-
-const WHITE_WIDTH = 1 / 52
-const BLACK_WIDTH = (2 / 3) * WHITE_WIDTH
+import { Box } from '../system'
+import Key from './key'
 
 const Board = Box.with({
   tabIndex: '1',
   width: '100%',
   height: '20%',
+  outline: 'none',
   b: '1px solid black',
   br: 'none'
 })
-
-const White = Box.with(({ pressed, ...props }) => ({
-  ...props,
-  width: percent(WHITE_WIDTH),
-  br: '1px solid black',
-  bg: pressed ? 'lightgrey' : 'white'
-}))
-
-const Black = Box.with(({ pressed, ...props }) => ({
-  ...props,
-  width: percent(BLACK_WIDTH),
-  height: '66%',
-  bg: pressed ? 'lightgrey' : 'black',
-  zIndex: 1,
-  b: '1px solid black',
-  bt: 'none',
-  mx: percent(-BLACK_WIDTH / 2)
-}))
-
-const Key = ({ index, pressed }) => {
-  const note = (9 + index) % 12
-  const Type = MAJOR_STEPS.includes(note) ? White : Black
-
-  return <Type id={index} pressed={pressed} />
-}
 
 class Keyboard extends React.Component {
   keys = sequence(88)
@@ -81,10 +55,17 @@ class Keyboard extends React.Component {
 
     if (isNaN(this.lastKey)) return
 
-    this.play(this.lastKey)
-
-    document.addEventListener('mousemove', this.onMouseMove)
-    document.addEventListener('mouseup', this.onMouseUp)
+    if (this.props.toggle) {
+      if (this.isPressed(this.lastKey)) {
+        this.stop(this.lastKey)
+      } else {
+        this.play(this.lastKey)
+      }
+    } else {
+      this.play(this.lastKey)
+      document.addEventListener('mousemove', this.onMouseMove)
+      document.addEventListener('mouseup', this.onMouseUp)
+    }
   }
 
   onMouseMove = e => {
@@ -108,8 +89,17 @@ class Keyboard extends React.Component {
     document.removeEventListener('mouseup', this.onMouseUp)
   }
 
+  isRoot(key) {
+    return this.props.value[0] === key
+  }
+
   isPressed(key) {
     return this.props.value.includes(key)
+  }
+
+  computeInterval(key) {
+    if (this.props.value.length < 1) return null
+    return computeInterval(key, this.props.value[0])
   }
 
   render() {
@@ -120,7 +110,13 @@ class Keyboard extends React.Component {
         onMouseDown={this.onMouseDown}
       >
         {this.keys.map(key => (
-          <Key key={key} index={key} pressed={this.isPressed(key)} />
+          <Key
+            key={key}
+            index={key}
+            root={this.isRoot(key)}
+            pressed={this.isPressed(key)}
+            interval={this.computeInterval(key)}
+          />
         ))}
       </Board>
     )

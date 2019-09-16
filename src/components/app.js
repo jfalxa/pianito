@@ -1,65 +1,50 @@
 import React, { useState, useEffect } from 'react'
 
 import createSynth from '../music/synth'
-
-import { Box } from './system'
-import Keyboard from './keyboard'
-import Hints from './hints'
-import Chords from './chords'
-import Scales from './scales'
-import Progressions from './progressions'
 import { loop } from '../helpers'
+
+import { Screen } from './system'
+import Chords from './chords'
+import Keyboard from './keyboard'
+import Options from './options'
 
 const play = createSynth()
 
-const Screen = Box.with({
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  p: 16
-})
-
-const Forms = Box.with({
-  width: 400,
-
-  '& > *': {
-    flex: '1 0',
-
-    form: {
-      height: 100
-    },
-
-    button: {
-      mt: 'auto'
-    }
-  }
-})
-
-const Controller = () => {
+function useSynth() {
   const [keys, setKeys] = useState([])
+  const [mute, setMute] = useState(true)
+  const [arpeggiate, setArpeggiate] = useState(false)
 
-  const playSequence = sequence =>
-    sequence ? loop(sequence, setKeys) : setKeys([])
+  useEffect(() => {
+    if (mute) return play([])
 
-  useEffect(() => play(keys), [keys])
+    if (arpeggiate) {
+      const interval = loop(keys, (_, i) => play(keys.slice(0, i + 1)), 500)
+      return () => clearInterval(interval)
+    }
+
+    return play(keys)
+  }, [keys, mute, arpeggiate])
+
+  return { keys, mute, arpeggiate, setKeys, setMute, setArpeggiate }
+}
+
+const App = () => {
+  const synth = useSynth()
 
   return (
     <Screen>
-      <Forms mb={8}>
-        <Chords play={setKeys} />
-        <Scales playSequence={playSequence} />
-        <Progressions playSequence={playSequence} />
-      </Forms>
-
-      <Hints value={keys} mb={8} />
-      <Keyboard value={keys} onChange={setKeys} />
+      <Chords keys={synth.keys} />
+      <Keyboard toggle value={synth.keys} onChange={synth.setKeys} />
+      <Options
+        mute={synth.mute}
+        arpeggiate={synth.arpeggiate}
+        setKeys={synth.setKeys}
+        setMute={synth.setMute}
+        setArpeggiate={synth.setArpeggiate}
+      />
     </Screen>
   )
 }
 
-export default Controller
+export default App

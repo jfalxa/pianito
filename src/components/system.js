@@ -21,7 +21,10 @@ export const Legend = Box.as('legend')
 
 export const Form = Box.as('form').with({ flexDirection: 'column' })
 
-export const Button = Box.as('button').with({ justifyContent: 'center' })
+export const Button = Box.as('button').with({
+  type: 'button',
+  justifyContent: 'center'
+})
 
 export const Row = Box.with({ '& *': { flex: 1 } })
 
@@ -41,3 +44,20 @@ export const Select = Box.as('select').with(
     ))
   })
 )
+
+export const Screen = Box.with({
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  flexDirection: 'column',
+  p: 16
+})
+
+export const Pane = Box.with({
+  flex: 1,
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center'
+})

@@ -1,58 +1,31 @@
 import CHORDS from '../config/chords'
-import INVERSIONS from '../config/inversions'
 
-import { noteToKey, keyToNote } from './converter'
-import { ok } from '../helpers'
+import { combine, unique } from '../helpers'
+import { computeIntervals } from './intervals'
+import NOTES from '../config/notes'
 
-function applyInversion(chord, inversion) {
-  switch (inversion) {
-    case 'first_inversion': // third as lowest
-      return chord.length > 3
-        ? [chord[1] - 12, chord[2] - 12, chord[3] - 12, chord[0]]
-        : [chord[1] - 12, chord[2] - 12, chord[0]]
+function isChord(chord, intervals) {
+  const simple = intervals.filter(unique)
 
-    case 'second_inversion': // fifth as lowest
-      return chord.length > 3
-        ? [chord[2] - 12, chord[3] - 12, chord[0], chord[1]]
-        : [chord[2] - 12, chord[0], chord[1]]
+  const hasEverything = simple.every(interval => chord.includes(interval))
+  const hasLength = chord.length === simple.length
 
-    case 'third_inversion': // seventh as lowest
-      return chord.length > 3
-        ? [chord[3] - 12, chord[0], chord[1], chord[2]]
-        : chord
-
-    case 'root_position':
-    default:
-      return chord
-  }
+  return hasEverything && hasLength
 }
 
-export function getChord(keys) {
-  const sorted = [...keys].sort()
-  const steps = sorted.map(key => key - keys[0])
-  const permutations = steps.map(root => steps.map(key => key - root))
+export function computeChords(keys) {
+  if (keys.length < 3) return []
 
-  const matches = []
+  const root = (9 + keys[0]) % 12
+  const notes = NOTES[root]
 
-  permutations.forEach(permutation =>
-    Object.keys(CHORDS).forEach(chord =>
-      INVERSIONS.forEach((inversion, i) => {
-        const invChord = applyInversion(CHORDS[chord], inversion)
-
-        if (i < keys.length && permutation.join('-') === invChord.join('-')) {
-          const root = permutation.indexOf(0)
-          matches.push([keyToNote(sorted[root]), chord, `(${i})`].join(' '))
-        }
-      })
+  const matches = computeIntervals(keys)
+    .map(intervals =>
+      Object.keys(CHORDS).find(chord => isChord(CHORDS[chord], intervals))
     )
-  )
+    .filter(Boolean)
+    .filter(unique)
+    .map(chord => (chord === 'maj' ? '' : chord.replace('_', ' ')))
 
-  return matches
-}
-
-export function buildChord(root, octave, type, inversion) {
-  const key = noteToKey(root + octave)
-  const chord = applyInversion(CHORDS[type], inversion)
-
-  return chord.filter(ok).map(step => key + step)
+  return combine([notes, matches])
 }

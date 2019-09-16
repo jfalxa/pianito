@@ -14,25 +14,31 @@ export function sequence(count) {
   return Array(count).fill(0).map((_, i) => i); // prettier-ignore
 }
 
-export function ok(value) {
-  return value === 0 || Boolean(value)
-}
-
-export function flip(object) {
-  const flipped = {}
-  for (const key in object) {
-    flipped[object[key]] = key
-  }
-  return flipped
-}
-
 export function loop(array, action, duration = 750) {
   let index = 1
 
-  action(array[0])
+  action(array[0], 0)
 
   return setInterval(() => {
-    action(array[index % array.length])
+    action(array[index % array.length], index % array.length)
     index++
   }, duration)
+}
+
+export function unique(element, index, array) {
+  return array.lastIndexOf(element) === index
+}
+
+export function combine([a, ...rest]) {
+  if (rest.length === 0) return a.map(value => [value])
+
+  const combined = []
+
+  for (const value of a) {
+    combine(rest).forEach(combinedRest =>
+      combined.push([value, ...combinedRest])
+    )
+  }
+
+  return combined
 }
