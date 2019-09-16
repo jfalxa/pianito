@@ -13,6 +13,7 @@ const Board = Box.with({
   width: '100%',
   height: '20%',
   outline: 'none',
+  userSelect: 'none',
   b: '1px solid black',
   br: 'none'
 })

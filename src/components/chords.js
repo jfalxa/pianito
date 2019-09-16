@@ -1,21 +1,26 @@
 import React from 'react'
 
 import NOTES from '../config/notes'
-import CHORDS from '../config/chords'
-import { findChords, prettyChord } from '../music/chords'
-import { Pane, Txt, Select } from './system'
+import { findChords, prettyChord, getChordKeys } from '../music/chords'
+import { Pane, Select } from './system'
 
-function useChords(keys) {
+function useChords(keys, setKeys) {
   if (keys.length === 0) return { chords: [] }
 
   const root = (9 + keys[0]) % 12
   const note = NOTES[root]
 
-  const chords = findChords(keys)
-    .map(prettyChord)
-    .map(chord => note + chord)
+  const chords = findChords(keys).map(chord => ({
+    value: chord,
+    label: note + prettyChord(chord)
+  }))
 
-  return { chords }
+  function onChange(chord) {
+    const chordKeys = getChordKeys(chord, keys[0])
+    setKeys(chordKeys)
+  }
+
+  return { chords, onChange }
 }
 
 const ChordSelect = Select.with({
@@ -28,15 +33,16 @@ const ChordSelect = Select.with({
   }
 })
 
-const Chords = ({ keys, ...props }) => {
-  const { chords } = useChords(keys)
+const Chords = ({ keys, setKeys, ...props }) => {
+  const { chords, onChange } = useChords(keys, setKeys)
 
   return (
     <Pane {...props}>
       <ChordSelect
+        value={0}
         disabled={chords.length === 0}
         options={chords}
-        onChange={() => {}}
+        onChange={onChange}
       />
     </Pane>
   )

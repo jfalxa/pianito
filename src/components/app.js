@@ -34,7 +34,7 @@ const App = () => {
 
   return (
     <Screen>
-      <Chords keys={synth.keys} />
+      <Chords keys={synth.keys} setKeys={synth.setKeys} />
       <Keyboard toggle value={synth.keys} onChange={synth.setKeys} />
       <Options
         mute={synth.mute}
