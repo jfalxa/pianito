@@ -32,7 +32,7 @@ export function computeInterval(key, rootKey) {
 }
 
 export function computeIntervals(keys) {
-  if (keys.length < 2) return
+  if (keys.length < 1) return []
 
   const intervals = keys.map(key => computeInterval(key, keys[0]))
 
