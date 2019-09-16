@@ -16,7 +16,7 @@ const White = Box.with(
     position: 'relative',
     width: percent(WHITE_WIDTH),
     br: '1px solid black',
-    bg: root ? 'green' : pressed ? 'grey' : highlighted ? 'lightgrey' : 'white',
+    bg: root ? 'red' : pressed ? 'lime' : highlighted ? 'lightgray' : 'white',
 
     [`&:hover ${InfoContainer}`]: {
       display: 'flex'
@@ -31,7 +31,7 @@ const Black = Box.with(
     position: 'relative',
     width: percent(BLACK_WIDTH),
     height: '66%',
-    bg: root ? 'green' : pressed ? 'grey' : highlighted ? 'lightgrey' : 'black',
+    bg: root ? 'red' : pressed ? 'lime' : highlighted ? 'lightgray' : 'black',
     zIndex: 1,
     b: '1px solid black',
     bt: 'none',

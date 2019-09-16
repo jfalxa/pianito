@@ -39,8 +39,8 @@ export const Select = Box.as('select').with(
   { height: 21 },
   ({ options, ...props }) => ({
     ...props,
-    children: options.map(({ value, label }) => (
-      <option key={value} value={value} children={label} />
+    children: options.map(({ value, label, props = null }) => (
+      <option key={value} value={value} children={label} {...props} />
     ))
   })
 )

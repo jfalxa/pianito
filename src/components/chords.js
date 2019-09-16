@@ -1,30 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import NOTES from '../config/notes'
 import { findChords, prettyChord, getChordKeys } from '../music/chords'
-import { Pane, Select } from './system'
+import { Pane, Select, Txt, Button } from './system'
 
-function useChords(keys, setKeys) {
-  if (keys.length === 0) return { chords: [] }
+const DEFAULT_OPTION = {
+  value: 'none',
+  label: 'Pick one',
+  props: { disabled: true }
+}
+
+function useChords(keys, chord, setKeys, setChord) {
+  if (keys.length === 0) return { chords: [], onApply: () => {} }
 
   const root = (9 + keys[0]) % 12
-  const note = NOTES[root]
+  const note = NOTES[root].join(' ')
 
-  const chords = findChords(keys).map(chord => ({
+  const chords = findChords(keys)
+
+  const chordOptions = chords.map(chord => ({
     value: chord,
     label: note + prettyChord(chord)
   }))
 
-  function onChange(chord) {
-    const chordKeys = getChordKeys(chord, keys[0])
-    setKeys(chordKeys)
-  }
+  useEffect(() => {
+    if (!chords.includes(chord)) {
+      setChord(chords[0] || 'none')
+    }
+  }, [keys])
 
-  return { chords, onChange }
+  return {
+    onApply: () => setKeys(getChordKeys(chord, keys[0])),
+    chords: chord && chords.length > 0 ? [DEFAULT_OPTION, ...chordOptions] : []
+  }
 }
 
 const ChordSelect = Select.with({
-  width: 140,
+  width: 200,
   height: 32,
 
   '&, & option': {
@@ -33,17 +45,26 @@ const ChordSelect = Select.with({
   }
 })
 
-const Chords = ({ keys, setKeys, ...props }) => {
-  const { chords, onChange } = useChords(keys, setKeys)
+const Chords = ({ keys, chord, setKeys, setChord, ...props }) => {
+  const { chords, onApply } = useChords(keys, chord, setKeys, setChord)
 
   return (
     <Pane {...props}>
+      <Txt mb={4}>Possible chords:</Txt>
       <ChordSelect
-        value={0}
+        value={chord}
         disabled={chords.length === 0}
         options={chords}
-        onChange={onChange}
+        onChange={setChord}
       />
+      <Button
+        disabled={!chord || chord === 'none'}
+        onClick={onApply}
+        width={200}
+        mt={4}
+      >
+        Apply
+      </Button>
     </Pane>
   )
 }

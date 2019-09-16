@@ -8,15 +8,19 @@ export function prettyChord(chord) {
   return chord === 'maj' ? '' : chord.replace('_', ' ')
 }
 
-export function isSubChord(chord, intervals) {
-  return intervals.every(interval => chord.includes(interval))
+export function matchesChord(chord, intervals) {
+  const matchesChord = intervals.every(interval => chord.includes(interval))
+  const matchesIntervals = false //chord.every(interval => intervals.includes(interval))
+
+  return matchesChord || matchesIntervals
 }
 
 export function isChord(chord, intervals) {
   const simple = intervals.filter(unique)
   const hasSameLength = chord.length === simple.length
+  const matchesChord = simple.every(interval => chord.includes(interval))
 
-  return isSubChord(chord, intervals) && hasSameLength
+  return matchesChord && hasSameLength
 }
 
 export function findChords(keys) {
@@ -24,7 +28,7 @@ export function findChords(keys) {
 
   return Object.keys(CHORDS)
     .filter(chord =>
-      allIntervals.some(intervals => isSubChord(CHORDS[chord], intervals))
+      allIntervals.some(intervals => matchesChord(CHORDS[chord], intervals))
     )
     .sort((a, b) => CHORDS[a].length - CHORDS[b].length)
 }

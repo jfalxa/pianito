@@ -98,6 +98,10 @@ class Keyboard extends React.Component {
     return this.props.value.includes(key)
   }
 
+  isChord(key) {
+    return this.props.chordKeys.includes(key)
+  }
+
   computeInterval(key) {
     if (this.props.value.length < 1) return null
     return computeInterval(key, this.props.value[0])
@@ -116,6 +120,7 @@ class Keyboard extends React.Component {
             index={key}
             root={this.isRoot(key)}
             pressed={this.isPressed(key)}
+            highlighted={this.isChord(key)}
             interval={this.computeInterval(key)}
           />
         ))}

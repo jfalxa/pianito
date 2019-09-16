@@ -7,11 +7,13 @@ import { Screen } from './system'
 import Chords from './chords'
 import Keyboard from './keyboard'
 import Options from './options'
+import { getChordKeys } from '../music/chords'
 
 const play = createSynth()
 
 function useSynth() {
   const [keys, setKeys] = useState([])
+  const [chord, setChord] = useState(null)
   const [mute, setMute] = useState(true)
   const [arpeggiate, setArpeggiate] = useState(false)
 
@@ -19,14 +21,32 @@ function useSynth() {
     if (mute) return play([])
 
     if (arpeggiate) {
-      const interval = loop(keys, (_, i) => play(keys.slice(0, i + 1)), 500)
+      const sortedKeys = keys.concat().sort()
+      const playSlice = (_, i) => play(sortedKeys.slice(0, i + 1))
+      const interval = loop(sortedKeys, playSlice, 500)
+
       return () => clearInterval(interval)
     }
 
     return play(keys)
   }, [keys, mute, arpeggiate])
 
-  return { keys, mute, arpeggiate, setKeys, setMute, setArpeggiate }
+  // prettier-ignore
+  const chordKeys = chord && chord !== 'none' && keys.length > 0 
+    ? getChordKeys(chord, keys[0]) 
+    : []
+
+  return {
+    keys,
+    chord,
+    chordKeys,
+    mute,
+    arpeggiate,
+    setKeys,
+    setChord,
+    setMute,
+    setArpeggiate
+  }
 }
 
 const App = () => {
@@ -34,8 +54,20 @@ const App = () => {
 
   return (
     <Screen>
-      <Chords keys={synth.keys} setKeys={synth.setKeys} />
-      <Keyboard toggle value={synth.keys} onChange={synth.setKeys} />
+      <Chords
+        keys={synth.keys}
+        chord={synth.chord}
+        setKeys={synth.setKeys}
+        setChord={synth.setChord}
+      />
+
+      <Keyboard
+        toggle
+        value={synth.keys}
+        chordKeys={synth.chordKeys}
+        onChange={synth.setKeys}
+      />
+
       <Options
         mute={synth.mute}
         arpeggiate={synth.arpeggiate}

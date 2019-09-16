@@ -14,6 +14,7 @@ export const InfoContainer = Box.with(({ show, bottom, top, ...props }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   userSelect: 'none',
+  fontSize: 14,
   my: 8
 }))
 
