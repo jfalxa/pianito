@@ -11,7 +11,7 @@ const DEFAULT_OPTION = {
 }
 
 function useChords(keys, chord, setKeys, setChord) {
-  if (keys.length === 0) return { chords: [], onApply: () => {} }
+  if (keys.length === 0) return { chords: [], onPlay: () => {} }
 
   const root = (9 + keys[0]) % 12
   const note = NOTES[root].join(' ')
@@ -30,7 +30,7 @@ function useChords(keys, chord, setKeys, setChord) {
   }, [keys])
 
   return {
-    onApply: () => setKeys(getChordKeys(chord, keys[0])),
+    onPlay: () => setKeys(getChordKeys(chord, keys[0])),
     chords: chord && chords.length > 0 ? [DEFAULT_OPTION, ...chordOptions] : []
   }
 }
@@ -46,7 +46,7 @@ const ChordSelect = Select.with({
 })
 
 const Chords = ({ keys, chord, setKeys, setChord, ...props }) => {
-  const { chords, onApply } = useChords(keys, chord, setKeys, setChord)
+  const { chords, onPlay } = useChords(keys, chord, setKeys, setChord)
 
   return (
     <Pane {...props}>
@@ -59,11 +59,11 @@ const Chords = ({ keys, chord, setKeys, setChord, ...props }) => {
       />
       <Button
         disabled={!chord || chord === 'none'}
-        onClick={onApply}
+        onClick={onPlay}
         width={200}
         mt={4}
       >
-        Apply
+        Play
       </Button>
     </Pane>
   )
