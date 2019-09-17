@@ -1,35 +1,32 @@
 import React from 'react'
-import { Pane, Box, Txt, Button, Input } from './system'
+import { Pane, Box, Button, Checkbox } from './system'
+import { Synth } from '../containers'
 
-const Options = ({
-  mute,
-  arpeggiate,
-  setKeys,
-  setMute,
-  setArpeggiate,
-  ...props
-}) => (
-  <Pane {...props}>
-    <Box mb={4}>
-      <Txt as="label">
-        <Input type="checkbox" checked={mute} onChange={() => setMute(!mute)} />
-        Mute
-      </Txt>
+const Options = props => {
+  const synth = Synth.useContainer()
 
-      <Txt as="label">
-        <Input
-          type="checkbox"
-          checked={arpeggiate}
-          onChange={() => setArpeggiate(!arpeggiate)}
+  return (
+    <Pane {...props}>
+      <Box mb={4}>
+        {/* prettier-ignore */}
+        <Checkbox 
+          label="Mute" 
+          checked={synth.mute} 
+          onChange={synth.toggleMute} 
         />
-        Arpeggiate
-      </Txt>
-    </Box>
 
-    <Button onClick={() => setKeys([])} width={144}>
-      Clear
-    </Button>
-  </Pane>
-)
+        <Checkbox
+          label="Arpeggiate"
+          checked={synth.arpeggiate}
+          onChange={synth.toggleArpeggiate}
+        />
+      </Box>
+
+      <Button onClick={synth.clear} width={144}>
+        Clear
+      </Button>
+    </Pane>
+  )
+}
 
 export default Options

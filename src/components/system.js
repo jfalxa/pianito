@@ -34,6 +34,16 @@ export const Input = Box.as('input').with(inputChange, { type: 'text' })
 
 export const NumberField = Input.with({ type: 'number' })
 
+export const Checkbox = Txt.as('label').with(
+  ({ checked, label, onChange, ...props }) => ({
+    ...props,
+    children: [
+      <Input key="0" type="checkbox" checked={checked} onChange={onChange} />,
+      label
+    ]
+  })
+)
+
 export const Select = Box.as('select').with(
   inputChange,
   { height: 21 },

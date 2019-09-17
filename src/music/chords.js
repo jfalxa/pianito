@@ -23,7 +23,15 @@ export function isChord(chord, intervals) {
   return matchesChord && hasSameLength
 }
 
-export function findChords(keys) {
+export function findChord(keys) {
+  const allIntervals = computeIntervals(keys)
+
+  return Object.keys(CHORDS).find(chord =>
+    allIntervals.some(intervals => isChord(CHORDS[chord], intervals))
+  )
+}
+
+export function findPossibleChords(keys) {
   const allIntervals = computeIntervals(keys)
 
   return Object.keys(CHORDS)
