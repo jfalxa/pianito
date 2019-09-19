@@ -1,46 +1,53 @@
 import CHORDS from '../config/chords'
 import INTERVALS from '../config/intervals'
+import { listKeyIntervals } from './intervals'
 
-import { unique } from '../helpers'
-import { computeIntervals } from './intervals'
-
-export function prettyChord(chord) {
-  return chord === 'maj' ? '' : chord.replace('_', ' ')
+export function isValidChord(chord) {
+  return chord in CHORDS
 }
 
 export function matchesChord(chord, intervals) {
-  const matchesChord = intervals.every(interval => chord.includes(interval))
-  const matchesIntervals = chord.every(interval => intervals.includes(interval))
+  const intervalsInChord = intervals.every(interval => chord.includes(interval))
+  const chordInIntervals = chord.every(interval => intervals.includes(interval))
 
-  return matchesChord || matchesIntervals
+  return intervalsInChord || chordInIntervals
 }
 
 export function isChord(chord, intervals) {
-  const simple = intervals.filter(unique)
-  const hasSameLength = chord.length === simple.length
-  const matchesChord = simple.every(interval => chord.includes(interval))
+  const hasSameLength = chord.length === intervals.length
+  const intervalsInChord = intervals.every(interval => chord.includes(interval))
 
-  return matchesChord && hasSameLength
+  return intervalsInChord && hasSameLength
 }
 
-export function findChord(keys) {
-  const allIntervals = computeIntervals(keys)
-
-  return Object.keys(CHORDS).find(chord =>
-    allIntervals.some(intervals => isChord(CHORDS[chord], intervals))
+export function findPotentialChords(potentialIntervals) {
+  return Object.keys(CHORDS).filter(chord =>
+    potentialIntervals.some(intervals => isChord(CHORDS[chord], intervals))
   )
 }
 
-export function findPossibleChords(keys) {
-  const allIntervals = computeIntervals(keys)
-
-  return Object.keys(CHORDS)
-    .filter(chord =>
-      allIntervals.some(intervals => matchesChord(CHORDS[chord], intervals))
-    )
-    .sort((a, b) => CHORDS[a].length - CHORDS[b].length)
+export function sortChords(chords) {
+  return chords.concat().sort((a, b) => CHORDS[a].length - CHORDS[b].length)
 }
 
-export function getChordKeys(chord, root) {
-  return CHORDS[chord].map(interval => root + INTERVALS[interval])
+export function listKeyChords(keys) {
+  if (keys.length === 0) return {}
+
+  const keyChords = {}
+  const keyIntervals = listKeyIntervals(keys)
+
+  Object.keys(keyIntervals).forEach(key => {
+    const chords = findPotentialChords(keyIntervals[key])
+
+    if (chords.length > 0) {
+      keyChords[key] = sortChords(chords)
+    }
+  })
+
+  return keyChords
+}
+
+export function getChordKeys(root, chord) {
+  const rootKey = parseInt(root, 10)
+  return CHORDS[chord].map(interval => rootKey + INTERVALS[interval])
 }

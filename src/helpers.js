@@ -44,7 +44,12 @@ export function combine([a, ...rest]) {
 }
 
 export function keyToNote(key) {
-  return (9 + key) % 12
+  return (9 + parseInt(key, 10)) % 12
+}
+
+const PRETTY_RX = /(maj$|_|\.)/g
+export function prettyChord(chord) {
+  return chord.replace(PRETTY_RX, ' ').trim()
 }
 
 export function inputChange({ onChange, ...props }) {

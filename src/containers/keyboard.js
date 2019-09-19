@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 
 import { Synth, Chords } from '.'
 import KEYS from '../config/keyboard'
-import { sequence } from '../helpers'
+import { sequence, keyToNote } from '../helpers'
 import { computeInterval } from '../music/intervals'
 import connectMIDI from '../music/midi'
 
@@ -21,21 +21,21 @@ function useKeyboard() {
     synth.setKeys(synth.keys.filter(k => k !== key))
   }
 
-  function _isRoot(key) {
-    return synth.keys[0] === key
-  }
-
   function _isPressed(key) {
     return synth.keys.includes(key)
   }
 
-  function _isChord(key) {
-    return chords.keys.includes(key)
+  function _isChordRoot(key) {
+    return chords.keys[0] === key
+  }
+
+  function _isChordNote(key) {
+    return chords.keys.some(chordKey => keyToNote(chordKey) === keyToNote(key))
   }
 
   function _getInterval(key) {
-    if (synth.keys.length === 0) return null
-    return computeInterval(key, synth.keys[0])
+    if (chords.keys.length === 0) return null
+    return computeInterval(chords.keys[0], key)
   }
 
   function _onKeyDown(e) {
@@ -68,10 +68,10 @@ function useKeyboard() {
 
   const play = useCallback(_play, [synth.keys])
   const stop = useCallback(_stop, [synth.keys])
-  const isRoot = useCallback(_isRoot, [synth.keys])
   const isPressed = useCallback(_isPressed, [synth.keys])
-  const isChord = useCallback(_isChord, [chords.keys])
-  const getInterval = useCallback(_getInterval, [synth.keys])
+  const isChordRoot = useCallback(_isChordRoot, [chords.keys])
+  const isChordNote = useCallback(_isChordNote, [chords.keys])
+  const getInterval = useCallback(_getInterval, [chords.keys])
   const onKeyDown = useCallback(_onKeyDown, [synth.keys])
   const onKeyUp = useCallback(_onKeyUp, [synth.keys])
   const onMouseDown = useCallback(_onMouseDown, [synth.keys])
@@ -80,9 +80,9 @@ function useKeyboard() {
     keys: keys.current,
     play,
     stop,
-    isRoot,
     isPressed,
-    isChord,
+    isChordRoot,
+    isChordNote,
     getInterval,
     onKeyDown,
     onKeyUp,

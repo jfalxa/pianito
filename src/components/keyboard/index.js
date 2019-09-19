@@ -28,9 +28,9 @@ const KeyboardDisplay = props => {
         <Key
           key={key}
           index={key}
-          root={keyboard.isRoot(key)}
           pressed={keyboard.isPressed(key)}
-          highlighted={keyboard.isChord(key)}
+          root={keyboard.isChordRoot(key)}
+          highlighted={keyboard.isChordNote(key)}
           interval={keyboard.getInterval(key)}
         />
       ))}
