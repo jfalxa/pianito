@@ -3,6 +3,7 @@ import { createContainer } from 'unstated-next'
 
 import { Synth } from '.'
 import NOTES from '../config/notes'
+import { keyToNote } from '../helpers'
 
 import {
   findPossibleChords,
@@ -24,7 +25,7 @@ function isChord(chord) {
 function createOptions(chords, key) {
   if (chords.length === 0) return []
 
-  const root = (9 + key) % 12
+  const root = keyToNote(key)
   const note = NOTES[root].join(' ')
 
   const options = chords.map(chord => ({

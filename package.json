@@ -10,15 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@emotion/core": "^10.0.10",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-systyle": "^0.3.0",
+    "@emotion/core": "^10.0.17",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-systyle": "^0.3.1",
     "unstated-next": "^1.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "parcel-bundler": "^1.12.3"
+    "parcel": "^1.12.3"
   }
 }

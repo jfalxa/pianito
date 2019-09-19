@@ -1,5 +1,5 @@
 import INTERVALS from '../config/intervals'
-import { combine } from '../helpers'
+import { combine, keyToNote } from '../helpers'
 
 function findIntervals(halves) {
   return Object.keys(INTERVALS).filter(
@@ -19,8 +19,8 @@ export function sortIntervals(a, b) {
 }
 
 export function computeInterval(key, rootKey) {
-  const note = (9 + key) % 12
-  const root = (9 + rootKey) % 12
+  const note = keyToNote(key)
+  const root = keyToNote(rootKey)
 
   let halves = note - root
 

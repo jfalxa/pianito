@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MAJOR_STEPS } from '../../config/scales'
-import { percent } from '../../helpers'
+import { percent, keyToNote } from '../../helpers'
 
 import { Box } from '../system'
 import Info, { InfoContainer } from './info'
@@ -53,7 +53,7 @@ const Black = Box.with(
 )
 
 const Key = ({ index, interval, root, pressed, highlighted }) => {
-  const note = (9 + index) % 12
+  const note = keyToNote(index)
   const Type = MAJOR_STEPS.includes(note) ? White : Black
 
   return (

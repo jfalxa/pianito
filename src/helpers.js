@@ -42,3 +42,11 @@ export function combine([a, ...rest]) {
 
   return combined
 }
+
+export function keyToNote(key) {
+  return (9 + key) % 12
+}
+
+export function inputChange({ onChange, ...props }) {
+  return { ...props, onChange: e => onChange(e.target.value) }
+}

@@ -1,9 +1,6 @@
 import React from 'react'
 import Styled from 'react-systyle'
-
-function inputChange({ onChange, ...props }) {
-  return { ...props, onChange: e => onChange(e.target.value) }
-}
+import { inputChange } from '../helpers'
 
 export const Box = Styled.with({
   display: 'flex',
