@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Chords } from '../containers'
-import { Pane, Select, Txt, Button } from './system'
+import { Pane, Select, Txt } from './system'
 
 const ChordSelect = Select.with({
   width: 200,
@@ -15,16 +15,15 @@ const ChordSelect = Select.with({
 
 const ChordsDisplay = props => {
   const chords = Chords.useContainer()
-  const empty = chords.options.length === 0
 
   return (
     <Pane {...props}>
       <Txt mb={4}>Possible chords:</Txt>
       <ChordSelect
         value={chords.selected}
-        disabled={empty}
-        options={chords.options}
-        onChange={chords.setSelected}
+        disabled={!chords.list.length}
+        options={chords.list}
+        onChange={chords.select}
       />
     </Pane>
   )

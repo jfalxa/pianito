@@ -1,6 +1,6 @@
 import React from 'react'
 import Styled from 'react-systyle'
-import { inputChange } from '../helpers'
+import { inputChange } from '../utils/helpers'
 
 export const Box = Styled.with({
   display: 'flex',
@@ -41,16 +41,16 @@ export const Checkbox = Txt.as('label').with(
   })
 )
 
-export const Select = Box.as('select').with(
-  inputChange,
-  { height: 21 },
-  ({ options, ...props }) => ({
+const select = ({ htmlSize, ...props }) => <select size={htmlSize} {...props} />
+
+export const Select = Box.as(select)
+  .with(inputChange)
+  .with(({ options, ...props }) => ({
     ...props,
     children: options.map(({ value, label, props = null }) => (
       <option key={value} value={value} children={label} {...props} />
     ))
-  })
-)
+  }))
 
 export const Screen = Box.with({
   position: 'fixed',

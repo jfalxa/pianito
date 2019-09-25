@@ -1,16 +1,16 @@
 import React from 'react'
 
-import Synth from './synth'
+import Notes from './notes'
 import Chords from './chords'
-import Keyboard from './keyboard'
+import Piano from './piano'
 
 const Provider = ({ children }) => (
-  <Synth.Provider>
+  <Notes.Provider>
     <Chords.Provider>
-      <Keyboard.Provider>{children}</Keyboard.Provider>
+      <Piano.Provider>{children}</Piano.Provider>
     </Chords.Provider>
-  </Synth.Provider>
+  </Notes.Provider>
 )
 
-export { Synth, Chords, Keyboard }
+export { Notes, Chords, Piano }
 export default Provider

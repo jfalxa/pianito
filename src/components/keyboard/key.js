@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MAJOR_STEPS } from '../../config/scales'
-import { percent, keyToNote } from '../../helpers'
+import { percent, keyToNote } from '../../utils/helpers'
 
 import { Box } from '../system'
 import Info, { InfoContainer } from './info'
@@ -50,6 +50,7 @@ const Key = ({ index, interval, root, pressed, highlighted }) => {
   return (
     <Type
       id={index}
+      data-note={index}
       note={note}
       interval={interval}
       root={root}
@@ -57,6 +58,13 @@ const Key = ({ index, interval, root, pressed, highlighted }) => {
       highlighted={highlighted}
     />
   )
+}
+
+Key.defaultProps = {
+  interval: null,
+  root: false,
+  pressed: false,
+  highlighted: false
 }
 
 export default Key

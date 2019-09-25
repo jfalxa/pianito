@@ -1,91 +1,42 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 
-import { Synth } from '.'
 import NOTES from '../config/notes'
-import { keyToNote, prettyChord } from '../helpers'
-import { getChordKeys, listKeyChords, isValidChord } from '../music/chords'
+import Notes from './notes'
+import { listKeyChords } from '../music/chords'
+import { keyToNote, prettyChord } from '../utils/helpers'
 
-const DEFAULT_OPTION = {
-  value: 'none',
-  label: 'Pick one',
-  props: { disabled: true }
-}
-
-function listChords(keyChords) {
-  const list = []
+function listChords(notes) {
+  const chords = []
+  const keyChords = listKeyChords(notes)
 
   Object.keys(keyChords).forEach(key => {
     const note = NOTES[keyToNote(key)].join('')
-    const chords = keyChords[key].map(chord => [key, note, chord])
+    const chordDetails = keyChords[key].map(chord => [key, note, chord])
 
-    list.push(...chords)
+    chords.push(...chordDetails)
   })
 
-  return list
+  return chords
 }
 
-function createOptions(chords) {
-  if (chords.length === 0) return []
-
-  const options = chords.map(([key, note, chord]) => ({
+function buildList(notes) {
+  return listChords(notes).map(([key, note, chord]) => ({
     value: [key, chord],
     label: note + prettyChord(chord)
   }))
-
-  return [DEFAULT_OPTION, ...options]
-}
-
-function createCandidate([key, , chord]) {
-  return [key, chord].join()
-}
-
-function hasChord(candidate, chords) {
-  return chords.findIndex(chord => candidate === createCandidate(chord)) >= 0
-}
-
-function useFilterChords(synth, selected, setSelected, setOptions) {
-  useEffect(() => {
-    // update selected chord and list
-    const keyChords = listKeyChords(synth.keys)
-    const chords = listChords(keyChords)
-
-    // prettier-ignore
-    const candidate =
-      chords.length === 0
-        ? 'none'
-        : hasChord(selected, chords)
-          ? selected
-          : createCandidate(chords[0])
-
-    setSelected(candidate || 'none')
-    setOptions(createOptions(chords))
-  }, [synth.keys])
-}
-
-function useComputeKeys(selected, setKeys) {
-  useEffect(() => {
-    if (selected === 'none') return setKeys([])
-    const [root, chord] = selected.split(',')
-    setKeys(getChordKeys(root, chord))
-  }, [selected])
 }
 
 function useChords() {
-  const synth = Synth.useContainer()
+  const notes = Notes.useContainer()
 
-  const [selected, setSelected] = useState('none')
-  const [options, setOptions] = useState([])
-  const [keys, setKeys] = useState([])
-
-  useFilterChords(synth, selected, setSelected, setOptions)
-  useComputeKeys(selected, setKeys)
+  const [selected, setSelected] = useState(undefined)
+  const list = useMemo(() => buildList(notes.list), [notes.list])
 
   return {
+    list,
     selected,
-    options,
-    keys,
-    setSelected
+    select: setSelected
   }
 }
 

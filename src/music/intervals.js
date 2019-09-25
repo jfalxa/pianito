@@ -1,5 +1,5 @@
 import INTERVALS from '../config/intervals'
-import { combine, keyToNote, unique } from '../helpers'
+import { combine, keyToNote, unique } from '../utils/helpers'
 
 function findIntervals(halves) {
   return Object.keys(INTERVALS).filter(

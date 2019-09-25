@@ -1,28 +1,34 @@
 import React from 'react'
 import { Pane, Box, Button, Checkbox } from './system'
-import { Synth } from '../containers'
+import { Piano } from '../containers'
 
 const Options = props => {
-  const synth = Synth.useContainer()
+  const { notes, options } = Piano.useContainer()
 
   return (
     <Pane {...props}>
-      <Box mb={4}>
-        {/* prettier-ignore */}
-        <Checkbox 
-          label="Mute" 
-          checked={synth.mute} 
-          onChange={synth.toggleMute} 
-        />
+      <Checkbox
+        label="Mute"
+        checked={options.mute}
+        onChange={options.toggleMute}
+        mb={4}
+      />
 
-        <Checkbox
-          label="Arpeggiate"
-          checked={synth.arpeggiate}
-          onChange={synth.toggleArpeggiate}
-        />
-      </Box>
+      <Checkbox
+        label="Sustain"
+        checked={options.sustain}
+        onChange={options.toggleSustain}
+        mb={4}
+      />
 
-      <Button onClick={synth.clear} width={144}>
+      <Checkbox
+        label="Arpeggiate"
+        checked={options.arpeggiate}
+        onChange={options.toggleArpeggiate}
+        mb={8}
+      />
+
+      <Button onClick={notes.clear} width={144}>
         Clear
       </Button>
     </Pane>
