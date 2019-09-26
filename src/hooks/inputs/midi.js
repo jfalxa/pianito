@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { listen } from '../../utils/hooks'
 import setupMIDIEvents from '../../utils/midi'
 
@@ -7,7 +7,7 @@ export default function useMIDI(notes, { sustain }) {
     setupMIDIEvents(document)
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function onMIDIDown(e) {
       const note = e.detail.key
 
