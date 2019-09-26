@@ -18,14 +18,14 @@ export const InfoContainer = Box.with(({ show, bottom, top, ...props }) => ({
   my: 8
 }))
 
-const Info = ({ note, interval, ...props }) => (
+const Info = ({ note, intervals, ...props }) => (
   <InfoContainer {...props}>
     {NOTES[note].map(n => (
       <Txt key={n}>{n}</Txt>
     ))}
 
-    {interval &&
-      interval.map(int => (
+    {intervals &&
+      intervals.map(int => (
         <Txt key={int} color="red">
           {int}
         </Txt>

@@ -1,10 +1,25 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { createContainer } from 'unstated-next'
 
 import NOTES from '../config/notes'
+import CHORDS from '../config/chords'
+import { KEYS } from './piano'
+
+import { Notes } from '.'
 import { keyToNote, prettyChord } from '../utils/helpers'
-import { listKeyChords, getClosestChord } from '../music/chords'
-import Notes from './notes'
+import { listKeyChords } from '../music/chords'
+import { computeIntervals } from '../music/intervals'
+
+function parseSelected(selected) {
+  if (!selected) return []
+
+  const parsed = selected.split(',')
+  const root = parseInt(parsed[0], 10)
+  const chord = CHORDS[parsed[1]]
+  const extended = chord.length > 4
+
+  return [root, chord, extended]
+}
 
 function listChords(notes) {
   const chords = []
@@ -20,47 +35,53 @@ function listChords(notes) {
   return chords
 }
 
-function buildList(notes) {
+function buildOptions(notes) {
   return listChords(notes).map(([key, note, chord]) => ({
-    value: [key, chord],
+    value: [key, chord].toString(),
     label: note + prettyChord(chord)
   }))
 }
 
-// select the chord matching the played notes
-function useSelectChord(notes, setSelected) {
-  useEffect(() => {
-    const chord = getClosestChord(notes)
-
-    if (chord) {
-      setSelected(chord)
-    }
-  }, [notes])
-}
-
 // list the keys that are part of the selected chord
-function useHighlightChord(selected, setKeys) {
-  useEffect(() => {
-    //
-  }, [selected])
+function buildKeys(selected) {
+  const [root, chord, extended] = parseSelected(selected)
+
+  return KEYS.filter(key =>
+    computeIntervals(root, key, extended).some(interval =>
+      chord.includes(interval)
+    )
+  )
 }
 
 function useChords() {
   const notes = Notes.useContainer()
 
-  const [selected, setSelected] = useState(undefined)
-  const [keys, setKeys] = useState([])
+  const [userSelected, setSelected] = useState('')
 
-  const list = useMemo(() => buildList(notes.list), [notes.list])
+  const options = useMemo(() => buildOptions(notes.list), [notes.list])
+  const selected = options.length === 0 ? '' : userSelected || options[0].value
+  const keys = useMemo(() => buildKeys(selected), [selected])
 
-  useSelectChord(notes.list, setSelected)
-  useHighlightChord(selected, setKeys)
+  function has(key) {
+    return keys.includes(key)
+  }
+
+  function root(key) {
+    return selected.startsWith(`${key},`)
+  }
+
+  function intervals(key) {
+    const [root, , extended] = parseSelected(selected)
+    return computeIntervals(root, key, extended)
+  }
 
   return {
-    list,
-    keys,
+    options,
     selected,
-    select: setSelected
+    select: setSelected,
+    has: useCallback(has, [keys]),
+    root: useCallback(root, [selected]),
+    intervals: useCallback(intervals, [selected])
   }
 }
 

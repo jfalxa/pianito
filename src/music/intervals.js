@@ -19,22 +19,20 @@ function computeHalves(root, key) {
   return halves < 0 ? halves + 24 : halves
 }
 
-export function computeInterval(root, key) {
+export function computeIntervals(root, key, extendedOnly) {
   const halves = computeHalves(root, key)
 
   const intervals = findIntervals(halves % 12)
   const extended = findIntervals(halves % 24)
 
-  return [...extended, ...intervals]
+  return extendedOnly ? extended : [...intervals, ...extended].filter(unique)
 }
 
 export function listKeyIntervals(keys) {
-  if (keys.length === 0) return {}
-
   const keyIntervals = {}
 
   keys.forEach(root => {
-    const intervals = keys.map(key => computeInterval(root, key))
+    const intervals = keys.map(key => computeIntervals(root, key))
     keyIntervals[root] = combine(intervals).map(sortIntervals)
   })
 

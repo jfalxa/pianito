@@ -2,15 +2,16 @@ import { useRef } from 'react'
 import { createContainer } from 'unstated-next'
 
 import { sequence } from '../utils/helpers'
-import Notes from './notes'
+import { Notes, Chords } from '.'
 import Inputs from '../hooks/inputs'
 import useSynth from '../hooks/synth'
 import useOptions from '../hooks/options'
 
-const KEYS = sequence(88)
+export const KEYS = sequence(88)
 
 function usePiano() {
   const notes = Notes.useContainer()
+  const chords = Chords.useContainer()
 
   const ref = useRef(null)
   const options = useOptions()
@@ -24,6 +25,7 @@ function usePiano() {
   return {
     ref,
     notes,
+    chords,
     options,
     keys: KEYS
   }

@@ -21,8 +21,8 @@ const ChordsDisplay = props => {
       <Txt mb={4}>Possible chords:</Txt>
       <ChordSelect
         value={chords.selected}
-        disabled={!chords.list.length}
-        options={chords.list}
+        disabled={!chords.options.length}
+        options={chords.options}
         onChange={chords.select}
       />
     </Pane>

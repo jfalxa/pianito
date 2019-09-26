@@ -13,12 +13,19 @@ const Board = Box.with({
 })
 
 const KeyboardDisplay = props => {
-  const { ref, keys, notes } = Piano.useContainer()
+  const { ref, keys, notes, chords } = Piano.useContainer()
 
   return (
     <Board {...props} ref={ref}>
       {keys.map(key => (
-        <Key key={key} index={key} pressed={notes.has(key)} />
+        <Key
+          key={key}
+          index={key}
+          pressed={notes.has(key)}
+          highlighted={chords.has(key)}
+          root={chords.root(key)}
+          intervals={chords.intervals(key)}
+        />
       ))}
     </Board>
   )
