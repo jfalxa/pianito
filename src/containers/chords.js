@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useLayoutEffect, useState, useMemo, useCallback } from 'react'
 import { createContainer } from 'unstated-next'
 
 import NOTES from '../config/notes'
@@ -53,14 +53,25 @@ function buildKeys(selected) {
   )
 }
 
+function useAutoSelect(options, setSelected) {
+  useLayoutEffect(() => {
+    if (options.length > 0) {
+      setSelected(options[0].value)
+    } else {
+      setSelected('')
+    }
+  }, [options])
+}
+
 function useChords() {
   const notes = Notes.useContainer()
 
-  const [userSelected, setSelected] = useState('')
+  const [selected, setSelected] = useState('')
 
   const options = useMemo(() => buildOptions(notes.list), [notes.list])
-  const selected = options.length === 0 ? '' : userSelected || options[0].value
   const keys = useMemo(() => buildKeys(selected), [selected])
+
+  useAutoSelect(options, setSelected)
 
   function has(key) {
     return keys.includes(key)
