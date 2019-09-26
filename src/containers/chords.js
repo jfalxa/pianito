@@ -1,10 +1,10 @@
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 
 import NOTES from '../config/notes'
-import Notes from './notes'
-import { listKeyChords } from '../music/chords'
 import { keyToNote, prettyChord } from '../utils/helpers'
+import { listKeyChords, getClosestChord } from '../music/chords'
+import Notes from './notes'
 
 function listChords(notes) {
   const chords = []
@@ -27,14 +27,38 @@ function buildList(notes) {
   }))
 }
 
+// select the chord matching the played notes
+function useSelectChord(notes, setSelected) {
+  useEffect(() => {
+    const chord = getClosestChord(notes)
+
+    if (chord) {
+      setSelected(chord)
+    }
+  }, [notes])
+}
+
+// list the keys that are part of the selected chord
+function useHighlightChord(selected, setKeys) {
+  useEffect(() => {
+    //
+  }, [selected])
+}
+
 function useChords() {
   const notes = Notes.useContainer()
 
   const [selected, setSelected] = useState(undefined)
+  const [keys, setKeys] = useState([])
+
   const list = useMemo(() => buildList(notes.list), [notes.list])
+
+  useSelectChord(notes.list, setSelected)
+  useHighlightChord(selected, setKeys)
 
   return {
     list,
+    keys,
     selected,
     select: setSelected
   }

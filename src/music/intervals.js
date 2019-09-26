@@ -24,15 +24,15 @@ export function computeInterval(root, key) {
   return findIntervals(halves)
 }
 
+export function listIntervals(root, keys) {
+  const intervals = keys.map(key => computeInterval(root, key))
+  return combine(intervals).map(sortIntervals)
+}
+
 export function listKeyIntervals(keys) {
   if (keys.length === 0) return {}
 
   const keyIntervals = {}
-
-  keys.forEach(root => {
-    const intervals = keys.map(key => computeInterval(root, key))
-    keyIntervals[root] = combine(intervals).map(sortIntervals)
-  })
-
+  keys.forEach(root => (keyIntervals[root] = listIntervals(root, keys)))
   return keyIntervals
 }

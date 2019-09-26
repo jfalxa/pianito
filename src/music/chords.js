@@ -2,31 +2,24 @@ import CHORDS from '../config/chords'
 import INTERVALS from '../config/intervals'
 import { listKeyIntervals } from './intervals'
 
-export function isValidChord(chord) {
-  return chord in CHORDS
+function matchesChord(chord, intervals) {
+  return intervals.every(interval => chord.includes(interval))
 }
 
-export function matchesChord(chord, intervals) {
-  const intervalsInChord = intervals.every(interval => chord.includes(interval))
-  const chordInIntervals = chord.every(interval => intervals.includes(interval))
-
-  return intervalsInChord || chordInIntervals
-}
-
-export function isChord(chord, intervals) {
+function isChord(chord, intervals) {
   const hasSameLength = chord.length === intervals.length
-  const intervalsInChord = intervals.every(interval => chord.includes(interval))
+  const intervalsInChord = matchesChord(chord, intervals)
 
   return intervalsInChord && hasSameLength
 }
 
-export function findPotentialChords(potentialIntervals) {
+function findChords(potentialIntervals, predicate) {
   return Object.keys(CHORDS).filter(chord =>
-    potentialIntervals.some(intervals => isChord(CHORDS[chord], intervals))
+    potentialIntervals.some(intervals => predicate(CHORDS[chord], intervals))
   )
 }
 
-export function sortChords(chords) {
+function sortChords(chords) {
   return chords.concat().sort((a, b) => CHORDS[a].length - CHORDS[b].length)
 }
 
@@ -37,7 +30,7 @@ export function listKeyChords(keys) {
   const keyIntervals = listKeyIntervals(keys)
 
   Object.keys(keyIntervals).forEach(key => {
-    const chords = findPotentialChords(keyIntervals[key])
+    const chords = findChords(keyIntervals[key], matchesChord)
 
     if (chords.length > 0) {
       keyChords[key] = sortChords(chords)
@@ -45,6 +38,16 @@ export function listKeyChords(keys) {
   })
 
   return keyChords
+}
+
+export function getClosestChord(keys) {
+  if (keys.length === 0) return {}
+
+  const keyIntervals = listKeyIntervals(keys)
+  const root = Object.keys(keyIntervals)[0]
+  const chords = findChords(keyIntervals[root], isChord)
+
+  return [root, chords[0]]
 }
 
 export function getChordKeys(root, chord) {

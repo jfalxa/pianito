@@ -49,7 +49,6 @@ const Key = ({ index, interval, root, pressed, highlighted }) => {
 
   return (
     <Type
-      id={index}
       data-note={index}
       note={note}
       interval={interval}

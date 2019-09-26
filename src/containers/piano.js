@@ -23,9 +23,9 @@ function usePiano() {
 
   return {
     ref,
+    notes,
     options,
-    keys: KEYS,
-    notes: notes
+    keys: KEYS
   }
 }
 
