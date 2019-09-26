@@ -43,8 +43,8 @@ export function combine([a, ...rest]) {
   return combined
 }
 
-export function keyToNote(key) {
-  return (9 + parseInt(key, 10)) % 12
+export function keyToNote(key, halves = 12) {
+  return (9 + parseInt(key, 10)) % halves
 }
 
 const PRETTY_RX = /(maj$|_|\.)/g
