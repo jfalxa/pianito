@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import Keyboard from './components/keybord'
+import Keyboard from './components/keyboard'
 
 const App = () => {
   const [keys, setKeys] = useState([])
