@@ -6,7 +6,15 @@ const App = () => {
   const [keys, setKeys] = useState([])
 
   return (
-    <div>
+    <div
+      css={{
+        display: 'flex',
+        width: '100vw',
+        height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
       <Keyboard
         value={keys}
         onChange={setKeys}

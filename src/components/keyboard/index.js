@@ -38,8 +38,7 @@ const White = props => (
     css={{
       background: 'white',
       flex: 1,
-      borderRight: '1px solid black',
-      boxSizing: 'border-box'
+      borderRight: '1px solid black'
     }}
   />
 )
@@ -51,10 +50,7 @@ const Key = ({ value, pressed, ...props }) => {
     <KeyType
       {...props}
       value={value}
-      style={{
-        background: pressed ? 'gray' : null,
-        boxSizing: 'border-box'
-      }}
+      style={{ background: pressed ? 'gray' : null }}
     />
   )
 }
