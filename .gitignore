@@ -1,7 +1,2 @@
 node_modules
-.DS_Store
-*.log
-.vscode
-coverage
-.cache
-dist
+.parcel-cache
