@@ -123,8 +123,6 @@ body {
   background-color: var(--gray-light);
 }
 
-.key:active,
-.key:active::after,
 .key.pressed,
 .key.pressed::after {
   background-color: var(--gray-dark);
