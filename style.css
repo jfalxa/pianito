@@ -76,7 +76,7 @@ body {
   background-color: var(--gray-light);
 }
 
-.event {
+.note {
   position: absolute;
   width: 100%;
   background-color: var(--gray-dark);

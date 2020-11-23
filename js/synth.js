@@ -2,6 +2,7 @@ const F0 = 27.5;
 const GAIN_DELAY = 0.01;
 
 function keyToFreq(key) {
+  // return Math.round(F0 * 2 ** (key / 12));
   const fn = F0 * 2 ** (key / 12);
   return Math.round(fn * 100) / 100;
 }
@@ -42,7 +43,7 @@ class Synth {
   };
 
   balanceOscillators = () => {
-    const gain = 0.95 / Object.keys(this.playing).length;
+    const gain = 0.5 / Object.keys(this.playing).length;
 
     for (const key in this.playing) {
       const osc = this.playing[key];
