@@ -41,29 +41,46 @@ body {
   margin-right: 16px;
 }
 
-/* SEQUENCER */
+/* TRACKER */
 
-#sequencer {
+.tracker-wrapper {
   flex: 1;
   position: relative;
   border: var(--border);
   border-right: none;
+  overflow: hidden;
 }
 
-#track {
+#tracker {
   position: absolute;
   display: flex;
-  flex: 1;
-  top: 0;
+  flex: 1 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   min-height: 100%;
+  will-change: transform;
 }
 
 .line {
+  position: relative;
   flex: 1;
   border-right: var(--border);
+}
+
+.line.white {
   background-color: var(--white);
+}
+
+.line.black {
+  background-color: var(--gray-light);
+}
+
+.event {
+  position: absolute;
+  width: 100%;
+  background-color: var(--gray-dark);
+  border: 1px solid var(--black);
 }
 
 /* ANALYZER */
