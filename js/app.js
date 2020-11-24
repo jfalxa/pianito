@@ -218,6 +218,10 @@ let activeTrack = [
   { time: 14000, key: 50, duration: 1000 },
 ];
 
+if (window.location.hash.length > 0) {
+  activeTrack = deserialize(window.location.hash);
+}
+
 const scale = 128 / 1000;
 
 const tracker = document.getElementById("tracker");
@@ -352,6 +356,7 @@ const controls = {
   play: document.getElementById("play"),
   stop: document.getElementById("stop"),
   record: document.getElementById("record"),
+  share: document.getElementById("share"),
 };
 
 controls.play.addEventListener("click", () => {
@@ -404,9 +409,9 @@ controls.stop.addEventListener("click", () => {
       }
     });
 
-    console.log(track);
     track.sort((a, b) => a.time - b.time);
     activeTrack = track;
+    share.href = `${window.location.origin}/#${serialize(activeTrack)}`;
     record = [];
     renderTrack(activeTrack);
   }
@@ -419,8 +424,15 @@ controls.record.addEventListener("click", () => {
   }
 });
 
-// function serialize(track) {
-//   const compressed = track.map((note) => [note.time, note.duration, note.key]);
-//   const json = JSON.stringify(compressed).replace(" ", "");
-//   return btoa(json);
-// }
+function serialize(track) {
+  const compressed = track.map((note) => [note.time, note.duration, note.key]);
+  const json = JSON.stringify(compressed).replace(" ", "");
+  console.log(encodeURIComponent(btoa(json)).length);
+  return encodeURIComponent(btoa(json));
+}
+
+function deserialize(encoded) {
+  const json = atob(decodeURIComponent(encoded.slice(1)));
+  const compressed = JSON.parse(json);
+  return compressed.map(([time, duration, key]) => ({ time, duration, key }));
+}

@@ -35,6 +35,7 @@ body {
 #controls {
   display: flex;
   padding: 16px;
+  align-items: center;
 }
 
 #controls > button {
