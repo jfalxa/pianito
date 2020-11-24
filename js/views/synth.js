@@ -2,14 +2,35 @@ const F0 = 27.5;
 const GAIN_DELAY = 0.01;
 
 function keyToFreq(key) {
-  // return Math.round(F0 * 2 ** (key / 12));
   const fn = F0 * 2 ** (key / 12);
   return Math.round(fn * 100) / 100;
 }
 
-class Synth {
+class SynthView {
+  isMuted = false;
   playing = {};
   ctx = new AudioContext();
+
+  constructor(trackerModel, keyboardModel) {
+    this.trackerModel = trackerModel;
+    this.keyboardModel = keyboardModel;
+
+    this.listenToModels();
+  }
+
+  listenToModels() {
+    this.keyboardModel.addEventListener("change", () => {
+      this.play(this.keyboardModel.playing);
+    });
+
+    this.trackerModel.addEventListener("mute", () => {
+      this.mute();
+    });
+
+    this.trackerModel.addEventListener("unmute", () => {
+      this.unmute();
+    });
+  }
 
   startOscillator = (key) => {
     if (this.playing[key]) return;
@@ -43,7 +64,7 @@ class Synth {
   };
 
   balanceOscillators = () => {
-    const gain = 0.5 / Object.keys(this.playing).length;
+    const gain = this.isMuted ? 0 : 0.5 / Object.keys(this.playing).length;
 
     for (const key in this.playing) {
       const osc = this.playing[key];
@@ -56,28 +77,18 @@ class Synth {
     return Object.keys(this.playing).map((key) => parseInt(key, 10));
   };
 
-  pressKey = (key) => {
-    this.startOscillator(key);
-    this.balanceOscillators();
-  };
-
-  releaseKey = (key) => {
-    this.stopOscillator(key);
-    this.balanceOscillators();
-  };
-
   play = (keys) => {
     const prevKeys = this.getPlaying();
 
     prevKeys.forEach((key) => {
       if (!keys.includes(key)) {
-        this.startOscillator(key);
+        this.stopOscillator(key);
       }
     });
 
     keys.forEach((key) => {
       if (!prevKeys.includes(key)) {
-        this.stopOscillator(key);
+        this.startOscillator(key);
       }
     });
 
@@ -89,6 +100,16 @@ class Synth {
       this.stopOscillator(key);
     });
   };
+
+  mute = () => {
+    this.isMuted = true;
+    this.balanceOscillators();
+  };
+
+  unmute = () => {
+    this.isMuted = false;
+    this.balanceOscillators();
+  };
 }
 
-export default Synth;
+export default SynthView;

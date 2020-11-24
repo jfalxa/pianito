@@ -40,6 +40,12 @@ body {
 
 #controls > button {
   margin-right: 16px;
+  width: 100px;
+  cursor: pointer;
+}
+
+button:disabled {
+  pointer-events: none;
 }
 
 /* TRACKER */
