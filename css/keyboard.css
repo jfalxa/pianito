@@ -1,0 +1,61 @@
+#keyboard {
+  display: flex;
+  height: 192px;
+  border: var(--border);
+  border-right: none;
+  padding-bottom: 48px;
+}
+
+.scale {
+  display: flex;
+}
+
+.key {
+  flex: 1;
+  position: relative;
+  border-right: var(--border);
+}
+
+.key.white {
+  background-color: var(--white);
+}
+
+.key.black {
+  background-color: var(--black);
+  border-bottom: var(--border);
+}
+
+.key.white::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  height: 48px;
+  background-color: var(--white);
+  border-right: var(--border);
+}
+
+.key:hover,
+.key:hover::after {
+  background-color: var(--gray-light);
+}
+
+.key.pressed,
+.key.pressed::after {
+  background-color: var(--gray-dark);
+}
+
+.key.left::after {
+  left: 0;
+  width: 150%;
+}
+
+.key.right::after {
+  left: calc(-50% - 1px);
+  width: calc(150% + 1px);
+}
+
+.key.middle::after {
+  left: calc(-50% - 1px);
+  width: calc(200% + 1px);
+}
