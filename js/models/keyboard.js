@@ -1,4 +1,4 @@
-class KeyboardModel extends EventTarget {
+class KeyboardModel extends HTMLElement {
   playing = [];
 
   isPlaying = (key) => {

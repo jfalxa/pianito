@@ -20,7 +20,7 @@ function eventsToTrack(events) {
   return track;
 }
 
-class TrackerModel extends EventTarget {
+class TrackerModel extends HTMLElement {
   isPlaying = false;
   isRecording = false;
   isPaused = false;

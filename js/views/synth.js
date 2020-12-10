@@ -11,23 +11,25 @@ class PianitoSynth extends HTMLElement {
   playing = {};
   ctx = new AudioContext();
 
-  bindModels = (trackerModel, keyboardModel) => {
-    this.trackerModel = trackerModel;
-    this.keyboardModel = keyboardModel;
+  connectedCallback() {
+    this.models = {
+      tracker: document.querySelector("model-tracker"),
+      keyboard: document.querySelector("model-keyboard"),
+    };
 
     this.listenToModels();
-  };
+  }
 
   listenToModels() {
-    this.keyboardModel.addEventListener("change", () => {
-      this.play(this.keyboardModel.playing);
+    this.models.keyboard.addEventListener("change", () => {
+      this.play(this.models.keyboard.playing);
     });
 
-    this.trackerModel.addEventListener("mute", () => {
+    this.models.tracker.addEventListener("mute", () => {
       this.mute();
     });
 
-    this.trackerModel.addEventListener("unmute", () => {
+    this.models.tracker.addEventListener("unmute", () => {
       this.unmute();
     });
   }

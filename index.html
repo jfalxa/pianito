@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
-    <pianito-controls id="controls"></pianito-controls>
-    <pianito-tracker class="tracker-wrapper"></pianito-tracker>
-    <!-- pianito-analyzer -->
-    <pianito-keyboard id="keyboard"></pianito-keyboard>
-    <pianito-synth></pianito-synth>
+    <model-keyboard></model-keyboard>
+    <model-tracker></model-tracker>
+
+    <view-controls id="controls"></view-controls>
+    <view-tracker class="tracker-wrapper"></view-tracker>
+    <!-- view-analyzer -->
+    <view-keyboard id="keyboard"></view-keyboard>
+    <view-synth></view-synth>
 
     <template id="controls-template">
       <button id="record">RECORD</button>

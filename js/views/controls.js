@@ -14,6 +14,11 @@ class PianitoControls extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
 
+    this.models = {
+      tracker: document.querySelector("model-tracker"),
+      keyboard: document.querySelector("model-keyboard"),
+    };
+
     this.ui = {
       play: this.querySelector("#play"),
       stop: this.querySelector("#stop"),
@@ -21,50 +26,45 @@ class PianitoControls extends HTMLElement {
       mute: this.querySelector("#mute"),
       share: this.querySelector("#share"),
     };
-  }
-
-  bindModels = (trackerModel, keyboardModel) => {
-    this.trackerModel = trackerModel;
-    this.keyboardModel = keyboardModel;
 
     this.listenToModels();
     this.listenToUI();
-  };
+  }
 
   listenToModels = () => {
-    this.trackerModel.addEventListener("record", () => {
+    this.models.tracker.addEventListener("record", () => {
       this.ui.record.textContent = txt.pause;
       this.ui.play.disabled = true;
       this.ui.stop.disabled = false;
     });
 
-    this.trackerModel.addEventListener("play", () => {
+    this.models.tracker.addEventListener("play", () => {
       this.ui.play.textContent = txt.pause;
       this.ui.record.disabled = true;
       this.ui.stop.disabled = false;
     });
 
-    this.trackerModel.addEventListener("pause", () => {
-      if (this.trackerModel.isRecording) {
+    this.models.tracker.addEventListener("pause", () => {
+      if (this.models.tracker.isRecording) {
         this.ui.record.textContent = txt.record;
       }
 
-      if (this.trackerModel.isPlaying) {
+      if (this.models.tracker.isPlaying) {
         this.ui.play.textContent = txt.play;
       }
     });
 
-    this.trackerModel.addEventListener("resume", () => {
-      if (this.trackerModel.isRecording) {
+    this.models.tracker.addEventListener("resume", () => {
+      if (this.models.tracker.isRecording) {
         this.ui.record.textContent = txt.pause;
       }
 
-      if (this.trackerModel.isPlaying) {
+      if (this.models.tracker.isPlaying) {
         this.ui.play.textContent = txt.pause;
       }
     });
 
-    this.trackerModel.addEventListener("stop", () => {
+    this.models.tracker.addEventListener("stop", () => {
       this.ui.record.textContent = txt.record;
       this.ui.play.textContent = txt.play;
       this.ui.record.disabled = false;
@@ -72,50 +72,50 @@ class PianitoControls extends HTMLElement {
       this.ui.stop.disabled = true;
     });
 
-    this.trackerModel.addEventListener("mute", () => {
+    this.models.tracker.addEventListener("mute", () => {
       this.ui.mute.textContent = txt.unmute;
     });
 
-    this.trackerModel.addEventListener("unmute", () => {
+    this.models.tracker.addEventListener("unmute", () => {
       this.ui.mute.textContent = txt.mute;
     });
 
-    this.trackerModel.addEventListener("change", () => {
-      const encoded = this.trackerModel.serialize();
+    this.models.tracker.addEventListener("change", () => {
+      const encoded = this.models.tracker.serialize();
       this.ui.share.href = `${window.location.origin}/#${encoded}`;
     });
   };
 
   listenToUI = () => {
     this.ui.record.addEventListener("click", () => {
-      if (!this.trackerModel.isRecording) {
-        this.trackerModel.record(this.keyboardModel);
-      } else if (!this.trackerModel.isPaused) {
-        this.trackerModel.pause();
+      if (!this.models.tracker.isRecording) {
+        this.models.tracker.record(this.models.keyboard);
+      } else if (!this.models.tracker.isPaused) {
+        this.models.tracker.pause();
       } else {
-        this.trackerModel.resume();
+        this.models.tracker.resume();
       }
     });
 
     this.ui.play.addEventListener("click", () => {
-      if (!this.trackerModel.isPlaying) {
-        this.trackerModel.play();
-      } else if (!this.trackerModel.isPaused) {
-        this.trackerModel.pause();
+      if (!this.models.tracker.isPlaying) {
+        this.models.tracker.play();
+      } else if (!this.models.tracker.isPaused) {
+        this.models.tracker.pause();
       } else {
-        this.trackerModel.resume();
+        this.models.tracker.resume();
       }
     });
 
     this.ui.stop.addEventListener("click", () => {
-      this.trackerModel.stop();
+      this.models.tracker.stop();
     });
 
     this.ui.mute.addEventListener("click", () => {
-      if (!this.trackerModel.isMuted) {
-        this.trackerModel.mute();
+      if (!this.models.tracker.isMuted) {
+        this.models.tracker.mute();
       } else {
-        this.trackerModel.unmute();
+        this.models.tracker.unmute();
       }
     });
   };

@@ -37,30 +37,30 @@ const firstKey = 39;
 const template = document.getElementById("keyboard-template");
 
 class PianitoKeyboard extends HTMLElement {
-  ui = {
-    keys: [],
-  };
-
   connectedCallback() {
-    this.renderKeys();
-  }
+    this.models = {
+      keyboard: document.querySelector("model-keyboard"),
+    };
 
-  bindModels = (keyboardModel) => {
-    this.keyboardModel = keyboardModel;
+    this.ui = {
+      keys: [],
+    };
+
+    this.renderKeys();
 
     this.listenToModel();
     this.listenToMouse();
     this.listenToKeyboard();
     this.listenToMIDI();
-  };
+  }
 
   listenToModel = () => {
-    this.keyboardModel.addEventListener("change", (e) => {
+    this.models.keyboard.addEventListener("change", (e) => {
       this.ui.keys.forEach((key) => {
         key.classList.remove(cl.pressed);
       });
 
-      this.keyboardModel.playing.forEach((key) => {
+      this.models.keyboard.playing.forEach((key) => {
         this.ui.keys[key].classList.add(cl.pressed);
       });
     });
@@ -71,10 +71,10 @@ class PianitoKeyboard extends HTMLElement {
       if (!e.target.classList.contains(cl.key)) return;
 
       const key = parseInt(e.target.dataset.key, 10);
-      this.keyboardModel.press(key, e);
+      this.models.keyboard.press(key, e);
 
       const onPointerUp = (e) => {
-        this.keyboardModel.release(key, e);
+        this.models.keyboard.release(key, e);
         window.removeEventListener("pointerup", onPointerUp);
       };
 
@@ -88,7 +88,7 @@ class PianitoKeyboard extends HTMLElement {
 
       const keyDown = firstKey + noteKeys[e.key];
 
-      this.keyboardModel.press(keyDown, e);
+      this.models.keyboard.press(keyDown, e);
 
       const onKeyUp = (e) => {
         if (typeof noteKeys[e.key] !== "number") return;
@@ -96,7 +96,7 @@ class PianitoKeyboard extends HTMLElement {
         const keyUp = firstKey + noteKeys[e.key];
 
         if (keyUp === keyDown) {
-          this.keyboardModel.release(keyUp, e);
+          this.models.keyboard.release(keyUp, e);
           window.removeEventListener("keyup", onKeyUp);
         }
       };
@@ -117,9 +117,9 @@ class PianitoKeyboard extends HTMLElement {
 
       // add or remove key from state
       if (data[2] > 0) {
-        this.keyboardModel.press(key);
+        this.models.keyboard.press(key);
       } else {
-        this.keyboardModel.release(key);
+        this.models.keyboard.release(key);
       }
     };
 

@@ -7,36 +7,36 @@ class PianitoTracker extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
 
+    this.models = {
+      tracker: document.querySelector("model-tracker"),
+      keyboard: document.querySelector("model-keyboard"),
+    };
+
     this.ui = {
       tracker: this.querySelector("#tracker"),
       lines: [],
     };
 
     this.renderLines();
-  }
-
-  bindModels = (trackerModel, keyboardModel) => {
-    this.trackerModel = trackerModel;
-    this.keyboardModel = keyboardModel;
+    this.renderTrack();
 
     this.listenToModels();
-    this.renderTrack();
-  };
+  }
 
   listenToModels = () => {
-    this.trackerModel.addEventListener("record", () => {
+    this.models.tracker.addEventListener("record", () => {
       this.record();
     });
 
-    this.trackerModel.addEventListener("play", () => {
+    this.models.tracker.addEventListener("play", () => {
       this.play();
     });
 
-    this.trackerModel.addEventListener("stop", () => {
+    this.models.tracker.addEventListener("stop", () => {
       this.stop();
     });
 
-    this.trackerModel.addEventListener("change", () => {
+    this.models.tracker.addEventListener("change", () => {
       this.renderTrack();
     });
   };
@@ -46,7 +46,7 @@ class PianitoTracker extends HTMLElement {
     let lastTime;
     let startTime;
 
-    const length = this.trackerModel.getDuration() * scale;
+    const length = this.models.tracker.getDuration() * scale;
     let scrolled = 0;
 
     const frame = (time) => {
@@ -55,7 +55,7 @@ class PianitoTracker extends HTMLElement {
         startTime = time;
       }
 
-      if (!this.trackerModel.isPaused) {
+      if (!this.models.tracker.isPaused) {
         const delta = time - lastTime;
         const elapsed = time - startTime;
 
@@ -64,17 +64,17 @@ class PianitoTracker extends HTMLElement {
 
         tracker.style.transform = `translate3d(0, ${scrolled}px, 0)`;
 
-        const playing = this.trackerModel.getPlayingAt(elapsed);
-        this.keyboardModel.setPlaying(playing);
+        const playing = this.models.tracker.getPlayingAt(elapsed);
+        this.models.keyboard.setPlaying(playing);
       }
 
       if (scrolled >= length) {
-        this.trackerModel.stop();
+        this.models.tracker.stop();
       }
 
-      if (!this.trackerModel.isPlaying) {
+      if (!this.models.tracker.isPlaying) {
         this.ui.tracker.style.transform = null;
-        this.keyboardModel.setPlaying([]);
+        this.models.keyboard.setPlaying([]);
         cancelAnimationFrame(id);
       } else {
         id = requestAnimationFrame(frame);
@@ -85,13 +85,13 @@ class PianitoTracker extends HTMLElement {
   };
 
   record = () => {
-    this.keyboardModel.addEventListener("press", this.trackerModel.recordPress); // prettier-ignore
-    this.keyboardModel.addEventListener("release", this.trackerModel.recordRelease); // prettier-ignore
+    this.models.keyboard.addEventListener("press", this.models.tracker.recordPress); // prettier-ignore
+    this.models.keyboard.addEventListener("release", this.models.tracker.recordRelease); // prettier-ignore
   };
 
   stop = () => {
-    this.keyboardModel.removeEventListener("press", this.trackerModel.recordPress); // prettier-ignore
-    this.keyboardModel.removeEventListener("release", this.trackerModel.recordRelease); // prettier-ignore
+    this.models.keyboard.removeEventListener("press", this.models.tracker.recordPress); // prettier-ignore
+    this.models.keyboard.removeEventListener("release", this.models.tracker.recordRelease); // prettier-ignore
   };
 
   renderLines = () => {
@@ -108,14 +108,14 @@ class PianitoTracker extends HTMLElement {
   };
 
   renderTrack = () => {
-    const length = this.trackerModel.getDuration() * scale;
+    const length = this.models.tracker.getDuration() * scale;
     this.ui.tracker.style.height = `calc(${length}px + 100%)`;
 
     this.ui.lines.forEach((line) => {
       line.textContent = "";
     });
 
-    this.trackerModel.track.forEach(({ time, key, duration }) => {
+    this.models.tracker.track.forEach(({ time, key, duration }) => {
       const line = this.ui.lines[key];
 
       const note = document.createElement("div");
