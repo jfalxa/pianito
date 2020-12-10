@@ -4,238 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pianito</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
-    <div id="controls">
+    <pianito-controls id="controls"></pianito-controls>
+    <pianito-tracker class="tracker-wrapper"></pianito-tracker>
+    <!-- pianito-analyzer -->
+    <pianito-keyboard id="keyboard"></pianito-keyboard>
+    <pianito-synth></pianito-synth>
+
+    <template id="controls-template">
       <button id="record">RECORD</button>
       <button id="play">PLAY</button>
       <button disabled id="stop">STOP</button>
       <button id="mute">MUTE</button>
       <a id="share" href="">Share</a>
-    </div>
+    </template>
 
-    <div class="tracker-wrapper">
-      <div id="tracker">
-        <!-- 0 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
+    <template id="tracker-template">
+      <div id="tracker"></div>
+    </template>
 
-        <!-- 1 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 2 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 3 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 4 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 5 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 6 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 7 -->
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-        <div class="line black"></div>
-        <div class="line white"></div>
-
-        <!-- 8 -->
-        <div class="line white"></div>
-      </div>
-    </div>
-
-    <div id="analyzer">
-      <span>Cm (C-E-G)</span>
-    </div>
-
-    <div id="keyboard">
-      <!-- 0 -->
-      <div class="key white left" data-key="0"></div>
-      <div class="key black" data-key="1"></div>
-      <div class="key white right" data-key="2"></div>
-
-      <!-- 1 -->
-      <div class="key white left" data-key="3"></div>
-      <div class="key black" data-key="4"></div>
-      <div class="key white middle" data-key="5"></div>
-      <div class="key black" data-key="6"></div>
-      <div class="key white right" data-key="7"></div>
-      <div class="key white left" data-key="8"></div>
-      <div class="key black" data-key="9"></div>
-      <div class="key white middle" data-key="10"></div>
-      <div class="key black" data-key="11"></div>
-      <div class="key white middle" data-key="12"></div>
-      <div class="key black" data-key="13"></div>
-      <div class="key white right" data-key="14"></div>
-
-      <!-- 2 -->
-      <div class="key white left" data-key="15"></div>
-      <div class="key black" data-key="16"></div>
-      <div class="key white middle" data-key="17"></div>
-      <div class="key black" data-key="18"></div>
-      <div class="key white right" data-key="19"></div>
-      <div class="key white left" data-key="20"></div>
-      <div class="key black" data-key="21"></div>
-      <div class="key white middle" data-key="22"></div>
-      <div class="key black" data-key="23"></div>
-      <div class="key white middle" data-key="24"></div>
-      <div class="key black" data-key="25"></div>
-      <div class="key white right" data-key="26"></div>
-
-      <!-- 3 -->
-      <div class="key white left" data-key="27"></div>
-      <div class="key black" data-key="28"></div>
-      <div class="key white middle" data-key="29"></div>
-      <div class="key black" data-key="30"></div>
-      <div class="key white right" data-key="31"></div>
-      <div class="key white left" data-key="32"></div>
-      <div class="key black" data-key="33"></div>
-      <div class="key white middle" data-key="34"></div>
-      <div class="key black" data-key="35"></div>
-      <div class="key white middle" data-key="36"></div>
-      <div class="key black" data-key="37"></div>
-      <div class="key white right" data-key="38"></div>
-
-      <!-- 4 -->
-      <div class="key white left" data-key="39"></div>
-      <div class="key black" data-key="40"></div>
-      <div class="key white middle" data-key="41"></div>
-      <div class="key black" data-key="42"></div>
-      <div class="key white right" data-key="43"></div>
-      <div class="key white left" data-key="44"></div>
-      <div class="key black" data-key="45"></div>
-      <div class="key white middle" data-key="46"></div>
-      <div class="key black" data-key="47"></div>
-      <div class="key white middle" data-key="48"></div>
-      <div class="key black" data-key="49"></div>
-      <div class="key white right" data-key="50"></div>
-
-      <!-- 5 -->
-      <div class="key white left" data-key="51"></div>
-      <div class="key black" data-key="52"></div>
-      <div class="key white middle" data-key="53"></div>
-      <div class="key black" data-key="54"></div>
-      <div class="key white right" data-key="55"></div>
-      <div class="key white left" data-key="56"></div>
-      <div class="key black" data-key="57"></div>
-      <div class="key white middle" data-key="58"></div>
-      <div class="key black" data-key="59"></div>
-      <div class="key white middle" data-key="60"></div>
-      <div class="key black" data-key="61"></div>
-      <div class="key white right" data-key="62"></div>
-
-      <!-- 6 -->
-      <div class="key white left" data-key="63"></div>
-      <div class="key black" data-key="64"></div>
-      <div class="key white middle" data-key="65"></div>
-      <div class="key black" data-key="66"></div>
-      <div class="key white right" data-key="67"></div>
-      <div class="key white left" data-key="68"></div>
-      <div class="key black" data-key="69"></div>
-      <div class="key white middle" data-key="70"></div>
-      <div class="key black" data-key="71"></div>
-      <div class="key white middle" data-key="72"></div>
-      <div class="key black" data-key="73"></div>
-      <div class="key white right" data-key="74"></div>
-
-      <!-- 7 -->
-      <div class="key white left" data-key="75"></div>
-      <div class="key black" data-key="76"></div>
-      <div class="key white middle" data-key="77"></div>
-      <div class="key black" data-key="78"></div>
-      <div class="key white right" data-key="79"></div>
-      <div class="key white left" data-key="80"></div>
-      <div class="key black" data-key="81"></div>
-      <div class="key white middle" data-key="82"></div>
-      <div class="key black" data-key="83"></div>
-      <div class="key white middle" data-key="84"></div>
-      <div class="key black" data-key="85"></div>
-      <div class="key white right" data-key="86"></div>
-
-      <!-- 8 -->
-      <div class="key white single" data-key="87"></div>
-    </div>
+    <template id="keyboard-template">
+      <div class="key white left"></div>
+      <div class="key black"></div>
+      <div class="key white middle"></div>
+      <div class="key black"></div>
+      <div class="key white right"></div>
+      <div class="key white left"></div>
+      <div class="key black"></div>
+      <div class="key white middle"></div>
+      <div class="key black"></div>
+      <div class="key white middle"></div>
+      <div class="key black"></div>
+      <div class="key white right"></div>
+    </template>
 
     <script type="module" src="js/index.js"></script>
   </body>

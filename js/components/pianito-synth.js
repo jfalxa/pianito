@@ -6,17 +6,17 @@ function keyToFreq(key) {
   return Math.round(fn * 100) / 100;
 }
 
-class SynthView {
+class PianitoSynth extends HTMLElement {
   isMuted = false;
   playing = {};
   ctx = new AudioContext();
 
-  constructor(trackerModel, keyboardModel) {
+  bindModels = (trackerModel, keyboardModel) => {
     this.trackerModel = trackerModel;
     this.keyboardModel = keyboardModel;
 
     this.listenToModels();
-  }
+  };
 
   listenToModels() {
     this.keyboardModel.addEventListener("change", () => {
@@ -112,4 +112,4 @@ class SynthView {
   };
 }
 
-export default SynthView;
+export default PianitoSynth;

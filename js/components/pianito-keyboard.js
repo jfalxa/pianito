@@ -33,33 +33,41 @@ const noteKeys = {
 
 const firstKey = 39;
 
-class KeyboardView {
-  el = document.getElementById("keyboard");
-  keys = Array.from(this.el.children);
+/** @type HTMLTemplateElement */
+const template = document.getElementById("keyboard-template");
 
-  constructor(keyboardModel) {
+class PianitoKeyboard extends HTMLElement {
+  ui = {
+    keys: [],
+  };
+
+  connectedCallback() {
+    this.renderKeys();
+  }
+
+  bindModels = (keyboardModel) => {
     this.keyboardModel = keyboardModel;
 
     this.listenToModel();
     this.listenToMouse();
     this.listenToKeyboard();
     this.listenToMIDI();
-  }
+  };
 
   listenToModel = () => {
     this.keyboardModel.addEventListener("change", (e) => {
-      this.keys.forEach((key) => {
+      this.ui.keys.forEach((key) => {
         key.classList.remove(cl.pressed);
       });
 
       this.keyboardModel.playing.forEach((key) => {
-        this.keys[key].classList.add(cl.pressed);
+        this.ui.keys[key].classList.add(cl.pressed);
       });
     });
   };
 
   listenToMouse = () => {
-    this.el.addEventListener("pointerdown", (e) => {
+    this.addEventListener("pointerdown", (e) => {
       if (!e.target.classList.contains(cl.key)) return;
 
       const key = parseInt(e.target.dataset.key, 10);
@@ -121,6 +129,35 @@ class KeyboardView {
       }
     });
   };
+
+  renderKeys = () => {
+    const scales = [];
+
+    // build 9 full scales
+    for (let i = 0; i <= 8; i++) {
+      scales.push(template.content.cloneNode(true));
+    }
+
+    // remove extra keys in first scale
+    while (scales[0].childNodes.length > 6) {
+      scales[0].firstChild.remove();
+    }
+
+    // remove extra keys in last scale
+    while (scales[8].childNodes.length > 2) {
+      scales[8].lastChild.remove();
+    }
+
+    // add them all to the dom
+    scales.forEach((scale) => this.append(scale));
+
+    this.ui.keys = Array.from(this.querySelectorAll(".key"));
+
+    // specify each key's value
+    this.ui.keys.forEach((key, i) => {
+      key.dataset.key = i;
+    });
+  };
 }
 
-export default KeyboardView;
+export default PianitoKeyboard;
