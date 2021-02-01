@@ -1,13 +1,9 @@
-#keyboard {
+view-keyboard {
   display: flex;
   height: 192px;
   border: var(--border);
   border-right: none;
   padding-bottom: 48px;
-}
-
-.scale {
-  display: flex;
 }
 
 .key {

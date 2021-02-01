@@ -1,15 +1,15 @@
-#controls {
-    display: flex;
-    padding: 16px;
-    align-items: center;
-  }
-  
-  #controls > button {
-    margin-right: 16px;
-    width: 100px;
-    cursor: pointer;
-  }
-  
-  button:disabled {
-    pointer-events: none;
-  }
+view-controls {
+  display: flex;
+  padding: 16px;
+  align-items: center;
+}
+
+view-controls > button {
+  margin-right: 16px;
+  width: 100px;
+  cursor: pointer;
+}
+
+button:disabled {
+  pointer-events: none;
+}

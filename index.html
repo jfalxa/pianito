@@ -10,10 +10,10 @@
     <model-keyboard></model-keyboard>
     <model-tracker></model-tracker>
 
-    <view-controls id="controls"></view-controls>
-    <view-tracker class="tracker-wrapper"></view-tracker>
-    <!-- view-analyzer -->
-    <view-keyboard id="keyboard"></view-keyboard>
+    <view-controls></view-controls>
+    <view-tracker></view-tracker>
+    <view-analyzer></view-analyzer>
+    <view-keyboard></view-keyboard>
     <view-synth></view-synth>
 
     <template id="controls-template">
@@ -26,6 +26,10 @@
 
     <template id="tracker-template">
       <div id="tracker"></div>
+    </template>
+
+    <template id="analyzer-template">
+      <span id="chord">N/A</span>
     </template>
 
     <template id="keyboard-template">

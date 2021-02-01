@@ -1,4 +1,4 @@
-.tracker-wrapper {
+view-tracker {
   flex: 1;
   position: relative;
   border: var(--border);
