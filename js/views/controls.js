@@ -10,7 +10,7 @@ const txt = {
 /** @type HTMLTemplateElement */
 const template = document.getElementById("controls-template");
 
-class PianitoControls extends HTMLElement {
+class ControlsView extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
 
@@ -121,4 +121,4 @@ class PianitoControls extends HTMLElement {
   };
 }
 
-export default PianitoControls;
+export default ControlsView;

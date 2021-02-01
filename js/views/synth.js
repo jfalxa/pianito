@@ -6,7 +6,7 @@ function keyToFreq(key) {
   return Math.round(fn * 100) / 100;
 }
 
-class PianitoSynth extends HTMLElement {
+class SynthView extends HTMLElement {
   isMuted = false;
   playing = {};
   ctx = new AudioContext();
@@ -114,4 +114,4 @@ class PianitoSynth extends HTMLElement {
   };
 }
 
-export default PianitoSynth;
+export default SynthView;

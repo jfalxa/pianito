@@ -3,7 +3,7 @@ const scale = 128 / 1000;
 /** @type HTMLTemplateElement */
 const template = document.getElementById("tracker-template");
 
-class PianitoTracker extends HTMLElement {
+class TrackerView extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
 
@@ -129,4 +129,4 @@ class PianitoTracker extends HTMLElement {
   };
 }
 
-export default PianitoTracker;
+export default TrackerView;

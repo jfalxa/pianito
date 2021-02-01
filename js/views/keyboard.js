@@ -36,7 +36,7 @@ const firstKey = 39;
 /** @type HTMLTemplateElement */
 const template = document.getElementById("keyboard-template");
 
-class PianitoKeyboard extends HTMLElement {
+class KeyboardView extends HTMLElement {
   connectedCallback() {
     this.models = {
       keyboard: document.querySelector("model-keyboard"),
@@ -160,4 +160,4 @@ class PianitoKeyboard extends HTMLElement {
   };
 }
 
-export default PianitoKeyboard;
+export default KeyboardView;
