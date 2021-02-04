@@ -18,8 +18,8 @@ class AnalyzerView extends HTMLElement {
 
   listenToModels = () => {
     this.models.keyboard.addEventListener("change", () => {
-      const chord = this.models.keyboard.getChord();
-      this.ui.chord.textContent = chord ?? "N/A";
+      const chord = this.models.keyboard.getChords();
+      this.ui.chord.textContent = chord.join(", ") || "-";
     });
   };
 }

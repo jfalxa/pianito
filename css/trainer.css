@@ -1,6 +1,7 @@
 view-trainer {
   display: none;
   flex: 1;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -8,4 +9,9 @@ view-trainer {
 view-trainer #chord {
   font-size: 52px;
   font-weight: bold;
+}
+
+view-trainer #intervals {
+  font-size: 24px;
+  color: #666;
 }

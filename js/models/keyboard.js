@@ -29,18 +29,23 @@ class KeyboardModel extends HTMLElement {
     this.dispatchEvent(new CustomEvent("change", { detail: { value: this.playing } })); // prettier-ignore
   };
 
-  getChord = () => {
-    const notes = this.playing
+  getChords = () => {
+    const keys = [...this.playing]
       .map((k) => (k + 9) % 12)
-      .filter((v, i, a) => a.lastIndexOf(v) === i)
-      .sort((a, b) => a - b);
+      .filter((k, i, a) => a.lastIndexOf(k) === i);
 
-    const firstNote = notes[0];
-    const intervals = notes.map((n) => n - firstNote);
+    const permutations = keys.map((key, _, a) => {
+      // get note index for current key
+      // grab the other pressed keys and measure their distance to the current key
+      const relative = a.filter((k) => k !== key).map((k) => (k - key + 12) % 12); // prettier-ignore
+      // remove duplicates for liste of notes
+      // sort the result in increasing interval distance
+      const intervals = [0, ...relative].sort((a, b) => a - b); // prettier-ignore
+      // if these intervals match a chord, return it
+      return CHORDS[intervals] && NOTES[key] + CHORDS[intervals];
+    });
 
-    return NOTES[firstNote] && CHORDS[intervals]
-      ? NOTES[firstNote] + CHORDS[intervals]
-      : null;
+    return permutations.filter(Boolean);
   };
 }
 

@@ -2,7 +2,7 @@ import CHORDS from "../data/chords.js";
 import NOTES from "../data/notes.js";
 
 /** @type HTMLTemplateElement */
-const template = document.getElementById("analyzer-template");
+const template = document.getElementById("trainer-template");
 
 class TrainerView extends HTMLElement {
   connectedCallback() {
@@ -15,6 +15,7 @@ class TrainerView extends HTMLElement {
 
     this.ui = {
       chord: this.querySelector("#chord"),
+      intervals: this.querySelector("#intervals"),
     };
 
     this.listenToModels();
@@ -24,8 +25,10 @@ class TrainerView extends HTMLElement {
     this.models.tracker.addEventListener("train", () => {
       this.chord = this.randomChord();
 
+      this.style.backgroundColor = null;
       this.style.display = "flex";
-      this.ui.chord.textContent = this.chord;
+      this.ui.chord.textContent = this.chord[0];
+      this.ui.intervals.textContent = this.chord[1];
     });
 
     this.models.tracker.addEventListener("stop", () => {
@@ -33,13 +36,14 @@ class TrainerView extends HTMLElement {
     });
 
     this.models.keyboard.addEventListener("change", (e) => {
-      const trainChord = this.chord;
-      const userChord = this.models.keyboard.getChord();
+      const trainChord = this.chord[0];
+      const userChord = this.models.keyboard.getChords();
 
-      if (userChord === trainChord) {
+      if (userChord.includes(trainChord)) {
         this.style.backgroundColor = "chartreuse";
+        this.chord = [];
         this.nextChord();
-      } else if (userChord) {
+      } else if (userChord.length > 0) {
         this.style.backgroundColor = "crimson";
       } else {
         this.style.backgroundColor = null;
@@ -54,7 +58,7 @@ class TrainerView extends HTMLElement {
 
     const note = NOTES[noteIndex];
     const [interval, chord] = chords[chordIndex];
-    return note + chord;
+    return [note + chord, interval];
   };
 
   nextChord = () => {
@@ -62,13 +66,16 @@ class TrainerView extends HTMLElement {
 
     let countdown = 3;
 
+    this.ui.intervals.textContent = "";
+
     const interval = setInterval(() => {
       this.ui.chord.textContent = countdown--;
 
       if (countdown < 0) {
         clearInterval(interval);
         this.chord = this.randomChord();
-        this.ui.chord.textContent = this.chord;
+        this.ui.chord.textContent = this.chord[0];
+        this.ui.intervals.textContent = this.chord[1];
       }
     }, 1000);
   };
