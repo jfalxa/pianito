@@ -24,6 +24,10 @@ class TrackerView extends HTMLElement {
   }
 
   listenToModels = () => {
+    this.models.tracker.addEventListener("train", () => {
+      this.style.display = "none";
+    });
+
     this.models.tracker.addEventListener("record", () => {
       this.record();
     });
@@ -33,6 +37,7 @@ class TrackerView extends HTMLElement {
     });
 
     this.models.tracker.addEventListener("stop", () => {
+      this.style.display = null;
       this.stop();
     });
 

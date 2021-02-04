@@ -21,6 +21,7 @@ function eventsToTrack(events) {
 }
 
 class TrackerModel extends HTMLElement {
+  isTraining = false;
   isPlaying = false;
   isRecording = false;
   isPaused = false;
@@ -78,8 +79,18 @@ class TrackerModel extends HTMLElement {
     this.dispatchEvent(new Event("play"));
   };
 
+  train = () => {
+    this.isTraining = true;
+    this.isPaused = false;
+    this.dispatchEvent(new Event("train"));
+  };
+
   stop = () => {
     this.isPaused = false;
+
+    if (this.isTraining) {
+      this.isTraining = false;
+    }
 
     if (this.isPlaying) {
       this.isPlaying = false;

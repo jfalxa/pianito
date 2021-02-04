@@ -1,0 +1,11 @@
+view-trainer {
+  display: none;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+view-trainer #chord {
+  font-size: 52px;
+  font-weight: bold;
+}

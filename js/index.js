@@ -5,12 +5,14 @@ import TrackerView from "./views/tracker.js";
 import AnalyzerView from "./views/analyzer.js";
 import KeyboardView from "./views/keyboard.js";
 import SynthView from "./views/synth.js";
+import TrainerView from "./views/trainer.js";
 
 customElements.define("model-keyboard", KeyboardModel);
 customElements.define("model-tracker", TrackerModel);
 
 customElements.define("view-controls", ControlsView);
 customElements.define("view-tracker", TrackerView);
+customElements.define("view-trainer", TrainerView);
 customElements.define("view-analyzer", AnalyzerView);
 customElements.define("view-keyboard", KeyboardView);
 customElements.define("view-synth", SynthView);

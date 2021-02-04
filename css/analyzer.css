@@ -5,7 +5,7 @@ view-analyzer {
   padding: 8px;
 }
 
-#chord {
+view-analyzer #chord {
   font-size: 24px;
   font-weight: bold;
 }

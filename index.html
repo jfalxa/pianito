@@ -12,11 +12,13 @@
 
     <view-controls></view-controls>
     <view-tracker></view-tracker>
+    <view-trainer></view-trainer>
     <view-analyzer></view-analyzer>
     <view-keyboard></view-keyboard>
     <view-synth></view-synth>
 
     <template id="controls-template">
+      <button id="train">TRAIN</button>
       <button id="record">RECORD</button>
       <button id="play">PLAY</button>
       <button disabled id="stop">STOP</button>
@@ -26,6 +28,10 @@
 
     <template id="tracker-template">
       <div id="tracker"></div>
+    </template>
+
+    <template id="trainer-template">
+      <span id="chord">N/A</span>
     </template>
 
     <template id="analyzer-template">

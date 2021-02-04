@@ -5,6 +5,7 @@ const txt = {
   stop: "STOP",
   mute: "MUTE",
   unmute: "UMMUTE",
+  train: "TRAIN",
 };
 
 /** @type HTMLTemplateElement */
@@ -20,6 +21,7 @@ class ControlsView extends HTMLElement {
     };
 
     this.ui = {
+      train: this.querySelector("#train"),
       play: this.querySelector("#play"),
       stop: this.querySelector("#stop"),
       record: this.querySelector("#record"),
@@ -32,19 +34,32 @@ class ControlsView extends HTMLElement {
   }
 
   listenToModels = () => {
+    this.models.tracker.addEventListener("train", () => {
+      this.ui.train.textContent = txt.pause;
+      this.ui.play.disabled = true;
+      this.ui.record.disabled = true;
+      this.ui.stop.disabled = false;
+    });
+
     this.models.tracker.addEventListener("record", () => {
       this.ui.record.textContent = txt.pause;
       this.ui.play.disabled = true;
+      this.ui.train.disabled = true;
       this.ui.stop.disabled = false;
     });
 
     this.models.tracker.addEventListener("play", () => {
       this.ui.play.textContent = txt.pause;
+      this.ui.train.disabled = true;
       this.ui.record.disabled = true;
       this.ui.stop.disabled = false;
     });
 
     this.models.tracker.addEventListener("pause", () => {
+      if (this.models.tracker.isTraining) {
+        this.ui.train.textContent = txt.train;
+      }
+
       if (this.models.tracker.isRecording) {
         this.ui.record.textContent = txt.record;
       }
@@ -55,6 +70,10 @@ class ControlsView extends HTMLElement {
     });
 
     this.models.tracker.addEventListener("resume", () => {
+      if (this.models.tracker.isTraining) {
+        this.ui.train.textContent = txt.pause;
+      }
+
       if (this.models.tracker.isRecording) {
         this.ui.record.textContent = txt.pause;
       }
@@ -65,8 +84,10 @@ class ControlsView extends HTMLElement {
     });
 
     this.models.tracker.addEventListener("stop", () => {
+      this.ui.train.textContent = txt.train;
       this.ui.record.textContent = txt.record;
       this.ui.play.textContent = txt.play;
+      this.ui.train.disabled = false;
       this.ui.record.disabled = false;
       this.ui.play.disabled = false;
       this.ui.stop.disabled = true;
@@ -87,6 +108,16 @@ class ControlsView extends HTMLElement {
   };
 
   listenToUI = () => {
+    this.ui.train.addEventListener("click", () => {
+      if (!this.models.tracker.isTraining) {
+        this.models.tracker.train(this.models.keyboard);
+      } else if (!this.models.tracker.isPaused) {
+        this.models.tracker.pause();
+      } else {
+        this.models.tracker.resume();
+      }
+    });
+
     this.ui.record.addEventListener("click", () => {
       if (!this.models.tracker.isRecording) {
         this.models.tracker.record(this.models.keyboard);
