@@ -36,15 +36,7 @@ class TrackerModel extends HTMLElement {
   };
 
   getDuration = () => {
-    if (this.track.length === 0) {
-      return 0;
-    }
-
-    const last = [...this.track]
-      .sort((a, b) => b.time + b.duration - a.time + a.duration)
-      .shift();
-
-    return last.time + last.duration;
+    return Math.max(0, ...this.track.map((e) => e.time + e.duration));
   };
 
   getPlayingAt = (time) => {
