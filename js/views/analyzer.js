@@ -19,7 +19,7 @@ class AnalyzerView extends HTMLElement {
   listenToModels = () => {
     this.models.keyboard.addEventListener("change", () => {
       const chord = this.models.keyboard.getChords();
-      this.ui.chord.textContent = chord.join(", ") || "-";
+      this.ui.chord.textContent = chord ? chord.join(", ") : "-";
     });
   };
 }

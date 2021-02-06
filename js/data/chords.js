@@ -40,7 +40,7 @@ const dim_seven = [...dim, sixth];
 // const min_seven_f5 = [...dim, seventh];
 // const seven_sus4 = [root, fourth, fifth, seventh];
 const maj_seven = [...maj, maj_seventh];
-const min_mag_seven = [...min, maj_seventh];
+const min_maj_seven = [...min, maj_seventh];
 
 // const nine = [...seven, ninth];
 // const min_nine = [...min_seven, ninth];
@@ -62,20 +62,20 @@ const min_mag_seven = [...min, maj_seventh];
 export default {
   [maj]: "maj",
   [min]: "min",
-  [aug]: "aug",
-  [dim]: "dim",
+  // [aug]: "aug",
+  // [dim]: "dim",
 
   // [six]: '6',
   // [min_six]: 'm6',
   [seven]: "7",
   [min_seven]: "m7",
-  [aug_seven]: "aug7",
-  [dim_seven]: "dim7",
+  // [aug_seven]: "aug7",
+  // [dim_seven]: "dim7",
   // [seven_f5]: '7 b5',
   // [min_seven_f5]: 'm7 b5',
   // [seven_sus4]: '7 sus4',
   [maj_seven]: "maj7",
-  [min_mag_seven]: "min maj7",
+  [min_maj_seven]: "min maj7",
 
   // [nine]: '9',
   // [min_nine]: 'm9',

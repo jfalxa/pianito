@@ -75,10 +75,10 @@ class KeyboardView extends HTMLElement {
 
       const onPointerUp = (e) => {
         this.models.keyboard.release(key, e);
-        window.removeEventListener("pointerup", onPointerUp);
+        this.removeEventListener("pointerup", onPointerUp);
       };
 
-      window.addEventListener("pointerup", onPointerUp);
+      this.addEventListener("pointerup", onPointerUp);
     });
   };
 

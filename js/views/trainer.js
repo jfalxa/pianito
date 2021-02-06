@@ -36,14 +36,14 @@ class TrainerView extends HTMLElement {
     });
 
     this.models.keyboard.addEventListener("change", (e) => {
-      const trainChord = this.chord[0];
-      const userChord = this.models.keyboard.getChords();
+      const trainChord = this.chord && this.chord[0];
+      const userChords = this.models.keyboard.getChords() ?? [];
 
-      if (userChord.includes(trainChord)) {
+      if (userChords.includes(trainChord)) {
         this.style.backgroundColor = "chartreuse";
-        this.chord = [];
+        this.chord = null;
         this.nextChord();
-      } else if (userChord.length > 0) {
+      } else if (userChords.length > 0 && trainChord) {
         this.style.backgroundColor = "crimson";
       } else {
         this.style.backgroundColor = null;
@@ -64,19 +64,13 @@ class TrainerView extends HTMLElement {
   nextChord = () => {
     if (this.models.tracker.isPaused) return;
 
-    let countdown = 3;
-
+    this.ui.chord.textContent = "GOOD";
     this.ui.intervals.textContent = "";
 
-    const interval = setInterval(() => {
-      this.ui.chord.textContent = countdown--;
-
-      if (countdown < 0) {
-        clearInterval(interval);
-        this.chord = this.randomChord();
-        this.ui.chord.textContent = this.chord[0];
-        this.ui.intervals.textContent = this.chord[1];
-      }
+    setTimeout(() => {
+      this.chord = this.randomChord();
+      this.ui.chord.textContent = this.chord[0];
+      this.ui.intervals.textContent = this.chord[1];
     }, 1000);
   };
 }

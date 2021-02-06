@@ -30,19 +30,21 @@ class KeyboardModel extends HTMLElement {
   };
 
   getChords = () => {
-    const keys = [...this.playing]
-      .map((k) => (k + 9) % 12)
-      .filter((k, i, a) => a.lastIndexOf(k) === i);
+    if (this.playing.length < 3) return;
 
-    const permutations = keys.map((key, _, a) => {
+    const permutations = this.playing.map((key, _, a) => {
       // get note index for current key
+      const note = (key + 9) % 12;
       // grab the other pressed keys and measure their distance to the current key
-      const relative = a.filter((k) => k !== key).map((k) => (k - key + 12) % 12); // prettier-ignore
-      // remove duplicates for liste of notes
+      const relative = a.filter((k) => k !== key).map((k) => k - key);
+      // normalize the distance with max 12 half-tones
+      const normalized = relative.map((d) => (d + 12) % 12);
+      // remove duplicates to get the list of intervals
+      const unique = normalized.filter((d, i, a) => a.lastIndexOf(d) === i);
       // sort the result in increasing interval distance
-      const intervals = [0, ...relative].sort((a, b) => a - b); // prettier-ignore
+      const intervals = [0, ...unique].sort((a, b) => a - b);
       // if these intervals match a chord, return it
-      return CHORDS[intervals] && NOTES[key] + CHORDS[intervals];
+      return CHORDS[intervals] && NOTES[note] + CHORDS[intervals];
     });
 
     return permutations.filter(Boolean);
