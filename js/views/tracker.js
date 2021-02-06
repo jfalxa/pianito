@@ -50,6 +50,7 @@ class TrackerView extends HTMLElement {
     let id;
     let lastTime;
     let startTime;
+    let pauseTime = 0;
 
     const length = this.models.tracker.getDuration() * scale;
     let scrolled = 0;
@@ -60,17 +61,20 @@ class TrackerView extends HTMLElement {
         startTime = time;
       }
 
-      if (!this.models.tracker.isPaused) {
-        const delta = time - lastTime;
-        const elapsed = time - startTime;
+      const delta = time - lastTime;
+      lastTime = time;
 
-        lastTime = time;
+      if (!this.models.tracker.isPaused) {
+        const elapsed = time - startTime - pauseTime;
+
         scrolled += delta * scale;
 
         tracker.style.transform = `translate3d(0, ${scrolled}px, 0)`;
 
         const playing = this.models.tracker.getPlayingAt(elapsed);
         this.models.keyboard.setPlaying(playing);
+      } else {
+        pauseTime += delta;
       }
 
       if (scrolled >= length) {
